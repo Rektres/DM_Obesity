@@ -222,6 +222,43 @@
         </section>
     </div>
 </div>
+
+    <!-- ÁRBOL DE DECISIÓN -->
+<div class="page-wrapper">
+  <div class="sidebar-left" id="sidebar-arboldecision">
+    <p>Imágenes decorativas<br>sección Árbol de Decisión</p>
+    <!-- Aquí puedes poner la imagen del árbol exportada desde Python -->
+    <img id="imgArbolDecision" src="" alt="Árbol de Decisión" style="width:100%; border-radius:12px; margin-top:10px; display:none;" />
+  </div>
+
+  <div class="content-wrapper" id="content-arboldecision">
+    <section id="arboldecision-section">
+      <h2>Distribución de Género por Clase Predicha</h2>
+
+      <div class="upload-wrapper">
+        <label for="uploadArbolCsv">Subir CSV distribución género por clase:</label><br/>
+        <input type="file" id="uploadArbolCsv" accept=".csv" />
+      </div>
+
+      <table id="tablaArbolDecision">
+        <thead>
+          <tr>
+            <th>Predicted_Class</th>
+            <th># Hombres</th>
+            <th># Mujeres</th>
+            <th>% Hombres</th>
+            <th>% Mujeres</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Aquí se llenan filas -->
+        </tbody>
+      </table>
+
+    </section>
+  </div>
+</div>
+    
 <script>
     // -------------------
     // APRIORI - Tabla
@@ -515,6 +552,69 @@ weighted avg       0.86      0.87      0.86       423
         };
         reader.readAsText(file);
     });
+
+     // Datos simulados iniciales
+  const datosArbolSimulados = [
+    {Predicted_Class: "Normal_Weight", Hombres: 244, Mujeres: 134, PHombres: 64.55, PMujeres: 35.45},
+    {Predicted_Class: "Obesity_Type_I", Hombres: 13, Mujeres: 102, PHombres: 11.30, PMujeres: 88.70},
+    {Predicted_Class: "Obesity_Type_II", Hombres: 0, Mujeres: 149, PHombres: 0.00, PMujeres: 100.00},
+    {Predicted_Class: "Obesity_Type_III", Hombres: 260, Mujeres: 173, PHombres: 60.05, PMujeres: 39.95},
+    {Predicted_Class: "Overweight_Level_I", Hombres: 132, Mujeres: 89, PHombres: 59.73, PMujeres: 40.27},
+    {Predicted_Class: "Overweight_Level_II", Hombres: 185, Mujeres: 207, PHombres: 47.19, PMujeres: 52.81}
+  ];
+
+  function renderTablaArbol(datos) {
+    const tbody = document.querySelector("#tablaArbolDecision tbody");
+    tbody.innerHTML = "";
+    datos.forEach(row => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.Predicted_Class}</td>
+        <td>${row.Hombres}</td>
+        <td>${row.Mujeres}</td>
+        <td>${row.PHombres.toFixed(2)}%</td>
+        <td>${row.PMujeres.toFixed(2)}%</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  renderTablaArbol(datosArbolSimulados);
+
+  // Parsear CSV para tabla árbol
+  // CSV esperado (sin header):
+  // Predicted_Class,# Hombres,# Mujeres,% Hombres,% Mujeres
+  function parseCsvArbol(text) {
+    const lines = text.trim().split('\n');
+    const datos = [];
+    for(let i=1; i<lines.length; i++) {
+      const cols = lines[i].split(',');
+      if(cols.length < 5) continue;
+      datos.push({
+        Predicted_Class: cols[0].trim(),
+        Hombres: parseInt(cols[1]),
+        Mujeres: parseInt(cols[2]),
+        PHombres: parseFloat(cols[3]),
+        PMujeres: parseFloat(cols[4])
+      });
+    }
+    return datos;
+  }
+
+  document.getElementById('uploadArbolCsv').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const datos = parseCsvArbol(ev.target.result);
+        renderTablaArbol(datos);
+      } catch(err) {
+        alert("Error leyendo CSV: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+  });
 </script>
 
 </body>
