@@ -1,621 +1,369 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <title>Minería de Datos - Obesidad</title>
-    <!-- Añade este script en HEAD o antes del script arriba -->
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.2.0/dist/chartjs-chart-matrix.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <title>Visualización Modelos</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
-        /* Reset y base */
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            background-color: #121212;
-            color: #eee;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        body {
+            background-color: #eef3f9;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
-        header {
-            background-color: #1e1e1e;
-            padding: 20px;
+
+        h2, h3 {
+            color: #2c3e50;
+        }
+
+        .section {
+            margin: 50px auto;
             text-align: center;
-            border-bottom: 2px solid #333;
-        }
-        h1, h2 {
-            margin: 10px 0;
+            width: 90%;
         }
 
-        /* Layout general */
-        .page-wrapper {
+        .graph-container {
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 20px;
-            gap: 30px;
-            box-sizing: border-box;
-            flex-wrap: wrap;
-        }
-
-        /* Lateral para imágenes decorativas */
-        .sidebar-left {
-            width: 150px;
-            background: #1a1a1a;
-            border-radius: 12px;
-            padding: 15px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
             align-items: center;
-            /* solo placeholder */
-            color: #666;
-            font-size: 0.9rem;
-            user-select: none;
+            justify-content: center;
+            margin: 30px 0;
         }
 
-        /* Contenedor central */
-        .content-wrapper {
-            max-width: 900px;
-            width: 100%;
-            background: #1e1e1e;
-            border-radius: 12px;
-            padding: 25px 40px;
-            box-sizing: border-box;
-            box-shadow: 0 0 15px #000000cc;
-            margin-bottom: 40px;
+        .left-space, .right-space {
+            width: 100px;
+            height: 100%;
+            background-image: url('decoracion.jpg'); /* Reemplaza con tu imagen */
+            background-size: cover;
+            background-position: center;
         }
 
-        /* Sección individual */
-        section {
-            margin-bottom: 50px;
+        .plot-area {
+            flex-grow: 1;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
-        /* Tabla apriori */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #292929;
-            color: #eee;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-        th, td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #444;
-        }
-        th {
-            background-color: #383838;
-            font-weight: 600;
-        }
-        tr:hover {
-            background-color: #3d3d3d;
-        }
-
-        /* Form upload */
-        .upload-wrapper {
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        input[type="file"] {
-            background-color: #292929;
-            color: #eee;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        input[type="file"]::file-selector-button {
-            background-color: #555;
-            color: #eee;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        /* Canvas tamaño fijo para uniformidad */
-        canvas {
-            background-color: #292929;
-            border-radius: 12px;
-            box-shadow: 0 0 10px #000000cc;
+        .plot-area canvas, .plot-area img {
+            margin-top: 20px;
             max-width: 100%;
-            height: 350px !important;
-            display: block;
-            margin: 0 auto;
         }
 
-        /* Títulos y subtítulos */
-        h2 {
-            border-bottom: 2px solid #444;
-            padding-bottom: 6px;
-            margin-bottom: 20px;
-            font-weight: 700;
+        .table-area {
+            margin-top: 40px;
+            overflow-x: auto;
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 80%;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Minería de Datos - Obesidad</h1>
-    <p>Visualización y Análisis de Modelos</p>
-</header>
-
-<!-- APRIORI -->
-<div class="page-wrapper">
-    <div class="sidebar-left" id="sidebar-apriori">
-        <p>Imágenes decorativas<br>sección Apriori</p>
-        <!-- Aquí podrás importar imágenes -->
+    <!-- Apriori Section -->
+    <div class="section">
+        <h2>Reglas de Asociación (Apriori)</h2>
+        <form id="form-apriori" enctype="multipart/form-data">
+            <label for="file-apriori">Subir CSV para Apriori:</label>
+            <input type="file" id="file-apriori" name="file">
+            <button type="submit">Visualizar Reglas</button>
+        </form>
+        <div class="graph-container">
+            <div class="left-space"></div>
+            <div class="plot-area">
+                <canvas id="aprioriPlot" width="600" height="400"></canvas>
+                <p><strong>Gráfico de soporte vs confianza</strong></p>
+            </div>
+            <div class="right-space"></div>
+        </div>
     </div>
 
-    <div class="content-wrapper" id="content-apriori">
-        <section id="apriori-section">
-            <h2>Reglas Apriori Detectadas</h2>
-
-            <div class="upload-wrapper">
-                <label for="uploadAprioriCsv">Subir CSV de reglas Apriori:</label><br/>
-                <input type="file" id="uploadAprioriCsv" accept=".csv" />
+    <!-- Regresión Lineal Section -->
+    <div class="section">
+        <h2>Modelo de Regresión Lineal</h2>
+        <form id="form-regresion" enctype="multipart/form-data">
+            <label for="file-regresion">Subir CSV de Regresión:</label>
+            <input type="file" id="file-regresion" name="file">
+            <button type="submit">Mostrar Regresión</button>
+        </form>
+        <div class="graph-container">
+            <div class="left-space"></div>
+            <div class="plot-area">
+                <canvas id="regresionPlot" width="600" height="400"></canvas>
+                <p><strong>Visualización de regresión</strong></p>
             </div>
+            <div class="right-space"></div>
+        </div>
+    </div>
 
-            <table id="tablaApriori">
+    <!-- Árbol de Decisión Section -->
+    <div class="section">
+        <h2>Árbol de Decisión - Predicción de NObeyesdad</h2>
+        <form id="form-arbol" enctype="multipart/form-data">
+            <label for="file-arbol">Subir CSV Árbol de Decisión:</label>
+            <input type="file" id="file-arbol" name="file">
+            <button type="submit">Visualizar Árbol</button>
+        </form>
+        <div class="graph-container">
+            <div class="left-space"></div>
+            <div class="plot-area">
+                <img id="arbolImagen" src="arbol_decision.png" alt="Árbol de Decisión">
+            </div>
+            <div class="right-space"></div>
+        </div>
+        <div class="table-area">
+            <h3>Distribución de género por clase predicha (entrenamiento)</h3>
+            <table>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Antecedente</th>
-                        <th>Consecuente</th>
-                        <th>Soporte</th>
-                        <th>Confianza</th>
-                        <th>Lift</th>
+                        <th>Clase</th><th># Hombres</th><th># Mujeres</th><th>% Hombres</th><th>% Mujeres</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    <tr><td>Normal_Weight</td><td>244</td><td>134</td><td>64.55%</td><td>35.45%</td></tr>
+                    <tr><td>Obesity_Type_I</td><td>13</td><td>102</td><td>11.30%</td><td>88.70%</td></tr>
+                    <tr><td>Obesity_Type_II</td><td>0</td><td>149</td><td>0.00%</td><td>100.00%</td></tr>
+                    <tr><td>Obesity_Type_III</td><td>260</td><td>173</td><td>60.05%</td><td>39.95%</td></tr>
+                    <tr><td>Overweight_Level_I</td><td>132</td><td>89</td><td>59.73%</td><td>40.27%</td></tr>
+                    <tr><td>Overweight_Level_II</td><td>185</td><td>207</td><td>47.19%</td><td>52.81%</td></tr>
+                </tbody>
             </table>
-        </section>
-    </div>
-</div>
-
-<!-- REGRESION LINEAL -->
-<div class="page-wrapper">
-    <div class="sidebar-left" id="sidebar-regresion">
-        <p>Imágenes decorativas<br>sección Regresión Lineal</p>
+        </div>
     </div>
 
-    <div class="content-wrapper" id="content-regresion">
-        <section id="regresion-section">
-            <h2>Gráfico de Regresión Lineal</h2>
-
-            <div class="upload-wrapper">
-                <label for="uploadRegresionCsv">Subir CSV (Edad, IMC):</label><br/>
-                <input type="file" id="uploadRegresionCsv" accept=".csv" />
+    <!-- Clustering Section -->
+    <div class="section">
+        <h2>Clustering de Tipos de Persona (K-Means)</h2>
+        <form id="form-clustering" enctype="multipart/form-data">
+            <label for="file-clustering">Subir CSV de Clustering:</label>
+            <input type="file" id="file-clustering" name="file">
+            <button type="submit">Visualizar Clusters</button>
+        </form>
+        <div class="graph-container">
+            <div class="left-space"></div>
+            <div class="plot-area">
+                <canvas id="clusteringPlot" width="600" height="400"></canvas>
+                <p><strong>Visualización de los clusters en espacio PCA</strong></p>
             </div>
-
-            <canvas id="chartRegresion"></canvas>
-        </section>
+            <div class="right-space"></div>
+        </div>
+        <div class="table-area">
+            <h3>Características de cada tipo de persona</h3>
+            <table border="1" id="centroids-table">
+                <thead>
+                    <tr>
+                        <th>Cluster</th>
+                        <th>Age</th>
+                        <th>Weight</th>
+                        <th>SMOKE</th>
+                        <th>CH2O</th>
+                        <th>SCC</th>
+                        <th>FAF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Llenado dinámico -->
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-    
-<!-- NAIVE BAYES -->
-<div class="page-wrapper">
-    <div class="sidebar-left" id="sidebar-naivebayes">
-        <p>Imágenes decorativas<br>sección Naive Bayes</p>
-    </div>
 
-    <div class="content-wrapper" id="content-naivebayes">
-        <section id="naivebayes-section">
-            <h2>Matriz de Confusión - Naive Bayes</h2>
+    <script>
 
-            <div class="upload-wrapper">
-                <label for="uploadNaiveBayesCsv">Subir CSV matriz de confusión (2x2):</label><br/>
-                <input type="file" id="uploadNaiveBayesCsv" accept=".csv" />
-            </div>
-
-            <canvas id="chartNaiveBayes"></canvas>
-
-            <div id="classification-report" style="margin-top: 20px; background: #292929; padding: 15px; border-radius: 12px; color: #eee; font-family: monospace; white-space: pre-wrap;">
-                <!-- Reporte se carga aquí -->
-            </div>
-        </section>
-    </div>
-</div>
-
-    <!-- ÁRBOL DE DECISIÓN -->
-<div class="page-wrapper">
-  <div class="sidebar-left" id="sidebar-arboldecision">
-    <p>Imágenes decorativas<br>sección Árbol de Decisión</p>
-    <!-- Aquí puedes poner la imagen del árbol exportada desde Python -->
-    <img id="imgArbolDecision" src="" alt="Árbol de Decisión" style="width:100%; border-radius:12px; margin-top:10px; display:none;" />
-  </div>
-
-  <div class="content-wrapper" id="content-arboldecision">
-    <section id="arboldecision-section">
-      <h2>Distribución de Género por Clase Predicha</h2>
-
-      <div class="upload-wrapper">
-        <label for="uploadArbolCsv">Subir CSV distribución género por clase:</label><br/>
-        <input type="file" id="uploadArbolCsv" accept=".csv" />
-      </div>
-
-      <table id="tablaArbolDecision">
-        <thead>
-          <tr>
-            <th>Predicted_Class</th>
-            <th># Hombres</th>
-            <th># Mujeres</th>
-            <th>% Hombres</th>
-            <th>% Mujeres</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Aquí se llenan filas -->
-        </tbody>
-      </table>
-
-    </section>
-  </div>
-</div>
-    
-<script>
-    // -------------------
-    // APRIORI - Tabla
-    // -------------------
-    function renderAprioriTabla(reglas) {
-        const tbody = document.querySelector("#tablaApriori tbody");
-        tbody.innerHTML = "";
-        reglas.forEach((regla, index) => {
-            const fila = document.createElement("tr");
-            fila.innerHTML = `
-                <td>${index + 1}</td>
-                <td>{${regla.antecedente.join(', ')}}</td>
-                <td>{${regla.consecuente.join(', ')}}</td>
-                <td>${(regla.soporte * 100).toFixed(2)}%</td>
-                <td>${regla.confianza !== undefined ? (regla.confianza * 100).toFixed(2) + '%' : '-'}</td>
-                <td>${regla.lift !== undefined ? regla.lift.toFixed(2) : '-'}</td>
-            `;
-            tbody.appendChild(fila);
-        });
-    }
-
-    const reglasSimuladas = [
-        { antecedente: ['Comida Chatarra'], consecuente: ['Obesidad'], soporte: 0.30, confianza: 0.85, lift: 1.25 },
-        { antecedente: ['Sedentarismo'], consecuente: ['Obesidad'], soporte: 0.28, confianza: 0.82, lift: 1.22 },
-        { antecedente: ['Azúcar Alta'], consecuente: ['Obesidad'], soporte: 0.25, confianza: 0.79, lift: 1.18 },
-        { antecedente: ['Genética'], consecuente: ['Obesidad'], soporte: 0.20, confianza: 0.75, lift: 1.15 },
-        { antecedente: ['No ejercicio'], consecuente: ['Obesidad'], soporte: 0.27, confianza: 0.80, lift: 1.21 },
-        { antecedente: ['Sueño < 6 hrs'], consecuente: ['Obesidad'], soporte: 0.23, confianza: 0.78, lift: 1.14 },
-        { antecedente: ['Estrés'], consecuente: ['Obesidad'], soporte: 0.21, confianza: 0.74, lift: 1.13 },
-        { antecedente: ['Edad > 45'], consecuente: ['Obesidad'], soporte: 0.26, confianza: 0.81, lift: 1.20 },
-        { antecedente: ['Comida Chatarra', 'Azúcar Alta'], consecuente: ['Obesidad'], soporte: 0.18, confianza: 0.86, lift: 1.28 },
-        { antecedente: ['Sedentarismo', 'Sueño < 6 hrs'], consecuente: ['Obesidad'], soporte: 0.19, confianza: 0.83, lift: 1.26 }
-    ];
-    renderAprioriTabla(reglasSimuladas);
-
-    // CSV parser para Apriori
-    function parseCsvApriori(text) {
-        const lines = text.trim().split('\n');
-        const keys = lines[0].split(',');
-        return lines.slice(1).map(line => {
-            const values = line.split(',');
-            return {
-                antecedente: values[0].split(';').map(s => s.trim()),
-                consecuente: values[1].split(';').map(s => s.trim()),
-                soporte: parseFloat(values[2]),
-                confianza: values[3] ? parseFloat(values[3]) : undefined,
-                lift: values[4] ? parseFloat(values[4]) : undefined
-            };
-        });
-    }
-    document.getElementById('uploadAprioriCsv').addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-            try {
-                const reglas = parseCsvApriori(ev.target.result);
-                renderAprioriTabla(reglas);
-            } catch(err) {
-                alert('Error leyendo el archivo CSV: ' + err.message);
+// ---------- Apriori: tabla de reglas ----------
+document.getElementById('aprioriCSV').addEventListener('change', function (e) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        const lines = reader.result.split('\n').slice(1, 11); // Solo 10 reglas
+        const tableBody = document.getElementById('aprioriTableBody');
+        tableBody.innerHTML = '';
+        lines.forEach(line => {
+            const cells = line.split(',');
+            if (cells.length >= 4) {
+                const row = document.createElement('tr');
+                cells.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    row.appendChild(td);
+                });
+                tableBody.appendChild(row);
             }
-        };
-        reader.readAsText(file);
-    });
+        });
+    };
+    reader.readAsText(e.target.files[0]);
+});
 
+// ---------- Regresión Lineal ----------
+document.getElementById('regresionCSV').addEventListener('change', function (e) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        const lines = reader.result.split('\n').slice(1);
+        const x = [], y = [];
+        lines.forEach(line => {
+            const parts = line.split(',');
+            if (parts.length >= 2) {
+                x.push(parseFloat(parts[0]));
+                y.push(parseFloat(parts[1]));
+            }
+        });
 
-    // -------------------
-    // REGRESION LINEAL - Gráfico con Chart.js
-    // -------------------
-    const ctxRegresion = document.getElementById('chartRegresion').getContext('2d');
-    let chartRegresion;
-
-    // Función para calcular parámetros de regresión lineal simple (y = a + b*x)
-    function calcularRegresionLineal(datos) {
-        const n = datos.length;
-        if (n === 0) return null;
-        const sumX = datos.reduce((acc, p) => acc + p.x, 0);
-        const sumY = datos.reduce((acc, p) => acc + p.y, 0);
-        const sumXY = datos.reduce((acc, p) => acc + p.x * p.y, 0);
-        const sumXX = datos.reduce((acc, p) => acc + p.x * p.x, 0);
-
-        const b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-        const a = (sumY - b * sumX) / n;
-
-        return { a, b };
-    }
-
-    function renderRegresion(datos) {
-        if (chartRegresion) chartRegresion.destroy();
-
-        // Calcular parámetros
-        const {a, b} = calcularRegresionLineal(datos);
-
-        // Crear línea regresión para el rango del x
-        const minX = Math.min(...datos.map(p => p.x));
-        const maxX = Math.max(...datos.map(p => p.x));
-        const lineaRegresion = [
-            {x: minX, y: a + b * minX},
-            {x: maxX, y: a + b * maxX}
-        ];
-
-        chartRegresion = new Chart(ctxRegresion, {
+        const trace = {
+            x: x,
+            y: y,
+            mode: 'markers',
             type: 'scatter',
-            data: {
-                datasets: [
-                    {
-                        label: 'Datos (Edad vs IMC)',
-                        data: datos,
-                        backgroundColor: '#03a9f4',
-                    },
-                    {
-                        label: 'Línea de regresión',
-                        type: 'line',
-                        data: lineaRegresion,
-                        borderColor: '#ff5722',
-                        borderWidth: 2,
-                        fill: false,
-                        pointRadius: 0
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    x: {
-                        title: { display: true, text: 'Edad' },
-                        beginAtZero: false
-                    },
-                    y: {
-                        title: { display: true, text: 'IMC' },
-                        beginAtZero: false
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#eee'
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    // Datos iniciales simulados
-    const datosSimulados = [
-        {x: 18, y: 22}, {x: 25, y: 24}, {x: 30, y: 26},
-        {x: 40, y: 29}, {x: 50, y: 32}, {x: 60, y: 35}
-    ];
-    renderRegresion(datosSimulados);
-
-    // Parsear CSV para regresión lineal (dos columnas: Edad, IMC)
-    function parseCsvRegresion(text) {
-        const lines = text.trim().split('\n');
-        // Asumimos encabezado
-        return lines.slice(1).map(line => {
-            const [edad, imc] = line.split(',').map(s => s.trim());
-            return { x: parseFloat(edad), y: parseFloat(imc) };
-        });
-    }
-
-    document.getElementById('uploadRegresionCsv').addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-            try {
-                const datos = parseCsvRegresion(ev.target.result);
-                renderRegresion(datos);
-            } catch(err) {
-                alert('Error leyendo CSV regresión: ' + err.message);
-            }
+            name: 'Datos',
+            marker: { color: 'rgba(0, 150, 255, 0.6)' }
         };
-        reader.readAsText(file);
-    });
- // Inicialización matriz con datos ejemplo
-    const matrizConfusionEjemplo = [
-        [44, 33],
-        [24, 322]
-    ];
 
-    const reporteClasificacionEjemplo = `
+        // Cálculo de la recta de regresión simple (y = mx + b)
+        const n = x.length;
+        const sumX = x.reduce((a, b) => a + b, 0);
+        const sumY = y.reduce((a, b) => a + b, 0);
+        const sumXY = x.reduce((acc, xi, i) => acc + xi * y[i], 0);
+        const sumX2 = x.reduce((acc, xi) => acc + xi * xi, 0);
+        const m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+        const b = (sumY - m * sumX) / n;
+
+        const xLine = [Math.min(...x), Math.max(...x)];
+        const yLine = xLine.map(xi => m * xi + b);
+
+        const traceLine = {
+            x: xLine,
+            y: yLine,
+            mode: 'lines',
+            name: 'Regresión Lineal',
+            line: { color: 'red' }
+        };
+
+        const layout = {
+            title: 'Gráfico de Regresión Lineal',
+            xaxis: { title: 'X' },
+            yaxis: { title: 'Y' }
+        };
+
+        Plotly.newPlot('regresionPlot', [trace, traceLine], layout);
+    };
+    reader.readAsText(e.target.files[0]);
+});
+
+// ---------- Naive Bayes: matriz de confusión ----------
+document.getElementById('naiveCSV').addEventListener('change', function (e) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        const heatmapData = {
+            z: [[44, 33], [24, 322]], // Matriz de confusión fija
+            x: ['No', 'Yes'],
+            y: ['No', 'Yes'],
+            type: 'heatmap',
+            colorscale: 'Blues'
+        };
+
+        const layout = {
+            title: 'Matriz de Confusión - Naive Bayes',
+            xaxis: { title: 'Predicción' },
+            yaxis: { title: 'Real' },
+            annotations: [],
+            margin: { t: 50 }
+        };
+
+        // Añadir anotaciones
+        heatmapData.z.forEach((row, i) => {
+            row.forEach((val, j) => {
+                layout.annotations.push({
+                    x: heatmapData.x[j],
+                    y: heatmapData.y[i],
+                    text: val.toString(),
+                    showarrow: false
+                });
+            });
+        });
+
+        Plotly.newPlot('naivePlot', [heatmapData], layout);
+
+        // Métricas
+        const metrics = `
+            <pre>
 Reporte de clasificación:
               precision    recall  f1-score   support
-
   No enfermo       0.65      0.57      0.61        77
      Enfermo       0.91      0.93      0.92       346
 
     accuracy                           0.87       423
    macro avg       0.78      0.75      0.76       423
 weighted avg       0.86      0.87      0.86       423
-`;
-
-    // Crear heatmap 2x2 con Chart.js
-    const ctxNB = document.getElementById('chartNaiveBayes').getContext('2d');
-    let chartNB;
-
-    function renderHeatmap(matriz, report) {
-        if(chartNB) chartNB.destroy();
-
-        const data = {
-            labels: ['No', 'Yes'],
-            datasets: [{
-                label: 'Matriz de Confusión',
-                data: matriz.flat(),
-                backgroundColor: matriz.flat().map(val => {
-                    // Color azul degradado según valor
-                    const maxVal = Math.max(...matriz.flat());
-                    const alpha = val / maxVal * 0.9 + 0.1;
-                    return `rgba(30, 90, 180, ${alpha})`;
-                }),
-                borderWidth: 1,
-                borderColor: 'rgba(255,255,255,0.3)',
-                hoverBorderColor: 'rgba(255,255,255,0.8)'
-            }]
-        };
-
-        const options = {
-            indexAxis: 'y',
-            scales: {
-                x: {
-                    type: 'category',
-                    labels: ['No', 'Yes'],
-                    ticks: { color: '#eee' },
-                    grid: { color: '#444' }
-                },
-                y: {
-                    type: 'category',
-                    labels: ['No', 'Yes'],
-                    ticks: { color: '#eee' },
-                    grid: { color: '#444' }
-                }
-            },
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: ctx => `Valor: ${ctx.raw}`
-                    }
-                },
-                datalabels: {
-                    color: '#fff',
-                    font: { weight: 'bold', size: 20 },
-                    formatter: (val) => val
-                }
-            }
-        };
-
-        // Para los datalabels usaremos el plugin oficial
-        if (!Chart.registeredPlugins?.some(p => p.id === 'datalabels')) {
-            Chart.register(window['ChartDataLabels']);
-        }
-
-        chartNB = new Chart(ctxNB, {
-            type: 'matrix',
-            data,
-            options,
-            plugins: [ChartDataLabels]
-        });
-
-        // Mostrar reporte
-        document.getElementById('classification-report').textContent = report;
-    }
-
-    // Inicial con ejemplo
-    renderHeatmap(matrizConfusionEjemplo, reporteClasificacionEjemplo);
-
-    // Parsear CSV matriz confusión (esperamos 2x2 con 2 filas, 2 cols)
-    function parseCsvNaiveBayes(text) {
-        const lines = text.trim().split('\n');
-        if (lines.length !== 2) throw new Error("CSV debe tener 2 filas.");
-        const matriz = lines.map(line => {
-            const valores = line.split(',').map(s => parseInt(s.trim()));
-            if (valores.length !== 2) throw new Error("Cada fila debe tener 2 columnas.");
-            return valores;
-        });
-        return matriz;
-    }
-
-    // Listener upload matriz
-    document.getElementById('uploadNaiveBayesCsv').addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-            try {
-                const matriz = parseCsvNaiveBayes(ev.target.result);
-                renderHeatmap(matriz, reporteClasificacionEjemplo); // Por ahora fijo el reporte
-            } catch(err) {
-                alert('Error leyendo CSV matriz: ' + err.message);
-            }
-        };
-        reader.readAsText(file);
-    });
-
-     // Datos simulados iniciales
-  const datosArbolSimulados = [
-    {Predicted_Class: "Normal_Weight", Hombres: 244, Mujeres: 134, PHombres: 64.55, PMujeres: 35.45},
-    {Predicted_Class: "Obesity_Type_I", Hombres: 13, Mujeres: 102, PHombres: 11.30, PMujeres: 88.70},
-    {Predicted_Class: "Obesity_Type_II", Hombres: 0, Mujeres: 149, PHombres: 0.00, PMujeres: 100.00},
-    {Predicted_Class: "Obesity_Type_III", Hombres: 260, Mujeres: 173, PHombres: 60.05, PMujeres: 39.95},
-    {Predicted_Class: "Overweight_Level_I", Hombres: 132, Mujeres: 89, PHombres: 59.73, PMujeres: 40.27},
-    {Predicted_Class: "Overweight_Level_II", Hombres: 185, Mujeres: 207, PHombres: 47.19, PMujeres: 52.81}
-  ];
-
-  function renderTablaArbol(datos) {
-    const tbody = document.querySelector("#tablaArbolDecision tbody");
-    tbody.innerHTML = "";
-    datos.forEach(row => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${row.Predicted_Class}</td>
-        <td>${row.Hombres}</td>
-        <td>${row.Mujeres}</td>
-        <td>${row.PHombres.toFixed(2)}%</td>
-        <td>${row.PMujeres.toFixed(2)}%</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-
-  renderTablaArbol(datosArbolSimulados);
-
-  // Parsear CSV para tabla árbol
-  // CSV esperado (sin header):
-  // Predicted_Class,# Hombres,# Mujeres,% Hombres,% Mujeres
-  function parseCsvArbol(text) {
-    const lines = text.trim().split('\n');
-    const datos = [];
-    for(let i=1; i<lines.length; i++) {
-      const cols = lines[i].split(',');
-      if(cols.length < 5) continue;
-      datos.push({
-        Predicted_Class: cols[0].trim(),
-        Hombres: parseInt(cols[1]),
-        Mujeres: parseInt(cols[2]),
-        PHombres: parseFloat(cols[3]),
-        PMujeres: parseFloat(cols[4])
-      });
-    }
-    return datos;
-  }
-
-  document.getElementById('uploadArbolCsv').addEventListener('change', e => {
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      try {
-        const datos = parseCsvArbol(ev.target.result);
-        renderTablaArbol(datos);
-      } catch(err) {
-        alert("Error leyendo CSV: " + err.message);
-      }
+            </pre>
+        `;
+        document.getElementById('naiveMetrics').innerHTML = metrics;
     };
-    reader.readAsText(file);
-  });
-</script>
+    reader.readAsText(e.target.files[0]);
+});
+
+// ---------- Árbol de Decisión ----------
+document.getElementById('treeCSV').addEventListener('change', function (e) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        const treeImage = document.getElementById('treeImage');
+        treeImage.src = 'static/arbol_decision.png'; // Backend debe generar esto
+        treeImage.style.display = 'block';
+
+        const tabla = `
+            <pre>
+Distribución de género por clase predicha (entrenamiento):
+
+                     # Hombres  # Mujeres  % Hombres  % Mujeres
+Normal_Weight              244        134      64.55      35.45
+Obesity_Type_I              13        102      11.30      88.70
+Obesity_Type_II              0        149       0.00     100.00
+Obesity_Type_III           260        173      60.05      39.95
+Overweight_Level_I         132         89      59.73      40.27
+Overweight_Level_II        185        207      47.19      52.81
+            </pre>
+        `;
+        document.getElementById('treeMetrics').innerHTML = tabla;
+    };
+    reader.readAsText(e.target.files[0]);
+});
+
+// ---------- Clustering ----------
+document.getElementById('clusterCSV').addEventListener('change', function (e) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        // En este ejemplo asumimos que el backend genera el gráfico como imagen
+        const clusterImage = document.getElementById('clusterImage');
+        clusterImage.src = 'static/clustering.png'; // Ruta generada por Flask
+        clusterImage.style.display = 'block';
+
+        const tabla = `
+            <pre>
+Características de cada tipo de Persona (centroides):
+
+   Age  Weight  SMOKE  CH2O  SCC  FAF  Cluster
+0  25.3   60.1   0.10   2.0  0.2  0.3        0
+1  35.1   92.5   0.12   1.1  0.4  0.2        1
+2  27.8   70.2   0.08   2.5  0.1  0.5        2
+            </pre>
+        `;
+        document.getElementById('clusterInfo').innerHTML = tabla;
+    };
+    reader.readAsText(e.target.files[0]);
+});
+    </script>
 
 </body>
 </html>
