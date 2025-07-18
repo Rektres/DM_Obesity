@@ -2,160 +2,220 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Exploración de Datos: Obesidad</title>
+    <title>Minería de Datos - Obesidad</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f0f4f8;
+            background-color: #1c1c1c;
+            color: #f1f1f1;
             margin: 0;
             padding: 0;
         }
         header {
-            background-color: #2c3e50;
-            color: white;
+            background-color: #111;
             padding: 20px;
             text-align: center;
+            border-bottom: 1px solid #333;
         }
         .container {
             padding: 30px;
         }
         h2 {
-            color: #2c3e50;
+            color: #e0e0e0;
+            margin-top: 40px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: #2c2c2c;
+            border: 1px solid #444;
         }
         th, td {
             padding: 12px;
             text-align: center;
-            border-bottom: 1px solid #ddd;
+            border: 1px solid #444;
         }
         th {
-            background-color: #2980b9;
-            color: white;
-        }
-        .stats-box {
-            display: flex;
-            justify-content: space-around;
-            margin: 30px 0;
-        }
-        .stat {
-            background: #3498db;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            width: 20%;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            background-color: #444;
+            color: #fff;
         }
         canvas {
-            background-color: white;
+            background-color: #2b2b2b;
             padding: 10px;
             border-radius: 10px;
-            margin-top: 40px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Minería de Datos - Análisis de Obesidad</h1>
-        <p>Visualización interactiva del dataset</p>
-    </header>
 
-    <div class="container">
-        <h2>Estadísticas Generales</h2>
-        <div class="stats-box">
-            <div class="stat">
-                <h3 id="total-personas">0</h3>
-                <p>Total de Personas</p>
-            </div>
-            <div class="stat">
-                <h3 id="promedio-imc">0</h3>
-                <p>Promedio de IMC</p>
-            </div>
-            <div class="stat">
-                <h3 id="obesos">0</h3>
-                <p>Casos de Obesidad</p>
-            </div>
-        </div>
+<header>
+    <h1>Exploración de Minería de Datos - Obesidad</h1>
+    <p>Visualización de algoritmos aplicados</p>
+</header>
 
-        <h2>Distribución de IMC</h2>
-        <canvas id="chartBMI" width="400" height="150"></canvas>
+<div class="container">
 
-        <h2>Vista del Dataset</h2>
-        <table id="tablaObesidad">
-            <thead>
-                <tr>
-                    <th>Edad</th>
-                    <th>Género</th>
-                    <th>IMC</th>
-                    <th>Nivel Actividad</th>
-                    <th>Diagnóstico</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Se llenará dinámicamente -->
-            </tbody>
-        </table>
-    </div>
+    <!-- Grilla de Apriori -->
+    <h2>Reglas de Asociación (Apriori)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Antecedente</th>
+                <th>Consecuente</th>
+                <th>Soporte</th>
+                <th>Confianza</th>
+                <th>Lift</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Simulado -->
+            <tr><td>1</td><td>{"Sedentarismo"}</td><td>{"Obesidad"}</td><td>0.42</td><td>0.81</td><td>1.34</td></tr>
+            <tr><td>2</td><td>{"Alta ingesta calórica"}</td><td>{"Obesidad"}</td><td>0.39</td><td>0.76</td><td>1.27</td></tr>
+            <tr><td>3</td><td>{"Edad > 35"}</td><td>{"IMC alto"}</td><td>0.30</td><td>0.71</td><td>1.20</td></tr>
+            <tr><td>4</td><td>{"Sin ejercicio"}</td><td>{"Obesidad"}</td><td>0.36</td><td>0.73</td><td>1.29</td></tr>
+            <tr><td>5</td><td>{"Bajo consumo de agua"}</td><td>{"IMC alto"}</td><td>0.28</td><td>0.66</td><td>1.18</td></tr>
+            <tr><td>6</td><td>{"Comida rápida > 3 veces/sem"}</td><td>{"Obesidad"}</td><td>0.34</td><td>0.70</td><td>1.25</td></tr>
+            <tr><td>7</td><td>{"Estrés elevado"}</td><td>{"Obesidad"}</td><td>0.26</td><td>0.63</td><td>1.10</td></tr>
+            <tr><td>8</td><td>{"IMC > 30"}</td><td>{"Diagnóstico: Obeso"}</td><td>0.48</td><td>0.90</td><td>1.50</td></tr>
+            <tr><td>9</td><td>{"Trabajo de oficina"}</td><td>{"Poca actividad"}</td><td>0.40</td><td>0.85</td><td>1.33</td></tr>
+            <tr><td>10</td><td>{"Sin desayuno"}</td><td>{"Sobrepeso"}</td><td>0.25</td><td>0.60</td><td>1.05</td></tr>
+        </tbody>
+    </table>
 
-    <script>
-        // Datos de ejemplo
-        const data = [
-            { edad: 25, genero: 'F', imc: 22.5, actividad: 'Moderada', diagnostico: 'Normal' },
-            { edad: 34, genero: 'M', imc: 31.1, actividad: 'Baja', diagnostico: 'Obesidad' },
-            { edad: 18, genero: 'F', imc: 27.3, actividad: 'Alta', diagnostico: 'Sobrepeso' },
-            { edad: 40, genero: 'M', imc: 35.0, actividad: 'Muy baja', diagnostico: 'Obesidad' }
-        ];
+    <!-- Gráfico Regresión Lineal -->
+    <h2>Regresión Lineal (Edad vs IMC)</h2>
+    <canvas id="graficoRegresion"></canvas>
 
-        const tablaBody = document.querySelector("#tablaObesidad tbody");
-        let sumaIMC = 0;
-        let casosObesidad = 0;
+    <!-- Gráfico Naive Bayes -->
+    <h2>Naive Bayes (Predicción Diagnóstico por IMC y Género)</h2>
+    <canvas id="graficoBayes"></canvas>
 
-        data.forEach(persona => {
-            const fila = document.createElement("tr");
-            fila.innerHTML = `
-                <td>${persona.edad}</td>
-                <td>${persona.genero}</td>
-                <td>${persona.imc}</td>
-                <td>${persona.actividad}</td>
-                <td>${persona.diagnostico}</td>
-            `;
-            tablaBody.appendChild(fila);
+    <!-- Gráfico Árbol de Decisión -->
+    <h2>Árbol de Decisión (Clasificación por Estilo de Vida)</h2>
+    <canvas id="graficoArbol"></canvas>
 
-            sumaIMC += persona.imc;
-            if (persona.diagnostico === 'Obesidad') casosObesidad++;
-        });
+    <!-- Gráfico de Clustering -->
+    <h2>Clustering (Segmentación por IMC y Actividad Física)</h2>
+    <canvas id="graficoCluster"></canvas>
 
-        document.getElementById("total-personas").innerText = data.length;
-        document.getElementById("promedio-imc").innerText = (sumaIMC / data.length).toFixed(2);
-        document.getElementById("obesos").innerText = casosObesidad;
+</div>
 
-        // Chart.js - Gráfico de barras de IMC
-        const ctx = document.getElementById('chartBMI').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: data.map((_, i) => `Persona ${i + 1}`),
-                datasets: [{
-                    label: 'IMC',
-                    data: data.map(p => p.imc),
-                    backgroundColor: '#3498db'
-                }]
+<script>
+    // Simulación de regresión lineal
+    const ctxReg = document.getElementById('graficoRegresion').getContext('2d');
+    new Chart(ctxReg, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Edad vs IMC',
+                data: [
+                    {x: 20, y: 22}, {x: 25, y: 24}, {x: 30, y: 27}, {x: 35, y: 30},
+                    {x: 40, y: 33}, {x: 45, y: 35}, {x: 50, y: 36}
+                ],
+                backgroundColor: '#00aced'
+            }, {
+                type: 'line',
+                label: 'Línea de Regresión',
+                data: [
+                    {x: 20, y: 22}, {x: 50, y: 36}
+                ],
+                borderColor: '#00aced',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: { title: { display: true, text: 'Edad' }, grid: { color: '#444' } },
+                y: { title: { display: true, text: 'IMC' }, grid: { color: '#444' } }
             },
-            options: {
-                scales: {
-                    y: { beginAtZero: true }
-                }
+            plugins: {
+                legend: { labels: { color: '#ccc' } }
             }
-        });
-    </script>
+        }
+    });
+
+    // Simulación Naive Bayes (porcentaje por clase)
+    const ctxBayes = document.getElementById('graficoBayes').getContext('2d');
+    new Chart(ctxBayes, {
+        type: 'bar',
+        data: {
+            labels: ['Obeso', 'Sobrepeso', 'Normal'],
+            datasets: [{
+                label: 'Probabilidad estimada',
+                data: [0.55, 0.30, 0.15],
+                backgroundColor: ['#e74c3c', '#f39c12', '#2ecc71']
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#444' } },
+                x: { grid: { color: '#444' } }
+            },
+            plugins: {
+                legend: { labels: { color: '#ccc' } }
+            }
+        }
+    });
+
+    // Simulación Árbol de Decisión
+    const ctxArbol = document.getElementById('graficoArbol').getContext('2d');
+    new Chart(ctxArbol, {
+        type: 'pie',
+        data: {
+            labels: ['Ejercicio frecuente', 'Ejercicio moderado', 'Sedentario'],
+            datasets: [{
+                data: [20, 35, 45],
+                backgroundColor: ['#27ae60', '#2980b9', '#8e44ad']
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { labels: { color: '#ccc' } }
+            }
+        }
+    });
+
+    // Simulación Clustering
+    const ctxClust = document.getElementById('graficoCluster').getContext('2d');
+    new Chart(ctxClust, {
+        type: 'scatter',
+        data: {
+            datasets: [
+                {
+                    label: 'Cluster 1',
+                    data: [{x:22,y:2},{x:23,y:1.5},{x:21,y:2.1}],
+                    backgroundColor: '#1abc9c'
+                },
+                {
+                    label: 'Cluster 2',
+                    data: [{x:28,y:3.1},{x:30,y:3},{x:29,y:2.8}],
+                    backgroundColor: '#e67e22'
+                },
+                {
+                    label: 'Cluster 3',
+                    data: [{x:35,y:1.2},{x:36,y:1},{x:34,y:1.3}],
+                    backgroundColor: '#e74c3c'
+                }
+            ]
+        },
+        options: {
+            scales: {
+                x: { title: { display: true, text: 'IMC' }, grid: { color: '#444' } },
+                y: { title: { display: true, text: 'Nivel Actividad Física' }, grid: { color: '#444' } }
+            },
+            plugins: {
+                legend: { labels: { color: '#ccc' } }
+            }
+        }
+    });
+</script>
+
 </body>
 </html>
