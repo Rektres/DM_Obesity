@@ -4,73 +4,115 @@
     <meta charset="UTF-8">
     <title>Visualización Modelos</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <style>
+       <style>
         body {
-            background-color: #eef3f9;
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #121212;
+            color: #f0f0f0;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        h2, h3 {
-            color: #2c3e50;
+        header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            border-bottom: 2px solid #333;
+        }
+
+        .container {
+            display: flex;
+            padding: 20px;
+        }
+
+        .left, .right {
+            width: 10%;
+            padding: 20px;
+        }
+
+        .main {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
         }
 
         .section {
-            margin: 50px auto;
-            text-align: center;
-            width: 90%;
+            background-color: #1e1e1e;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
         }
 
-        .graph-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 30px 0;
+        h2 {
+            color: #ffffff;
+            margin-bottom: 10px;
         }
 
-        .left-space, .right-space {
-            width: 100px;
-            height: 100%;
-            background-image: url('decoracion.jpg'); /* Reemplaza con tu imagen */
-            background-size: cover;
-            background-position: center;
+        input[type="file"] {
+            background-color: #2c2c2c;
+            border: 1px solid #555;
+            color: #f0f0f0;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 15px;
         }
 
-        .plot-area {
-            flex-grow: 1;
-            background-color: #f5f5f5;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .plot-area canvas, .plot-area img {
-            margin-top: 20px;
+        canvas, #confusion-matrix, #decision-tree-img, #clustering-plot {
             max-width: 100%;
-        }
-
-        .table-area {
-            margin-top: 40px;
-            overflow-x: auto;
+            height: auto;
+            margin-top: 20px;
+            background-color: #222;
+            padding: 10px;
+            border-radius: 8px;
         }
 
         table {
-            margin: 0 auto;
+            width: 100%;
             border-collapse: collapse;
-            width: 80%;
-            background-color: white;
+            margin-top: 15px;
         }
 
         th, td {
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #444;
+            text-align: center;
         }
 
         th {
-            background-color: #3498db;
-            color: white;
+            background-color: #333;
         }
+
+        tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+
+        tr:hover {
+            background-color: #383838;
+        }
+
+        .legend {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #bbb;
+        }
+
+        button {
+            background-color: #444;
+            color: #eee;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #666;
+        }
+
     </style>
 </head>
 <body>
