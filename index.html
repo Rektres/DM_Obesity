@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Visualización Modelos</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-        <style>
-    /* Reset básico */
-    * {
-      box-sizing: border-box;
-    }
-
+  <meta charset="UTF-8" />
+  <title>Visualización Modelos</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
     body, html {
       height: 100%;
       margin: 0;
@@ -22,7 +18,6 @@
       overflow: auto;
       padding: 20px;
     }
-
     .container {
       width: 900px;
       max-width: 95vw;
@@ -34,54 +29,7 @@
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
       text-align: center;
     }
-
-    h2, h3 {
-      color: #81d4fa;
-      margin-bottom: 10px;
-    }
-
-    form {
-      margin-bottom: 20px;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 6px;
-      color: #80deea;
-    }
-
-    input[type="file"] {
-      margin-bottom: 10px;
-      color: #fff;
-      background-color: #2c2c2c;
-      border: none;
-      padding: 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      display: block;
-    }
-
-    button {
-      background-color: #0288d1;
-      color: white;
-      border: none;
-      padding: 10px 24px;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-top: 5px;
-    }
-
-    button:hover {
-      background-color: #0277bd;
-    }
-
+    h2, h3 { color: #81d4fa; margin-bottom: 10px; }
     .graph-container {
       display: flex;
       justify-content: center;
@@ -89,16 +37,14 @@
       margin: 30px 0;
       gap: 20px;
     }
-
     .left-space, .right-space {
       width: 80px;
       height: 200px;
-      background-image: url('decoracion.jpg'); /* Cambia esta ruta a tu imagen */
+      background-image: url('decoracion.jpg');
       background-size: cover;
       background-position: center;
       border-radius: 10px;
     }
-
     .plot-area {
       flex-grow: 1;
       background-color: #263238;
@@ -108,7 +54,6 @@
       max-width: 600px;
       max-height: 420px;
     }
-
     canvas, img {
       max-width: 100%;
       max-height: 360px;
@@ -118,7 +63,6 @@
       margin-left: auto;
       margin-right: auto;
     }
-
     .table-area {
       margin-top: 30px;
       overflow-x: auto;
@@ -126,7 +70,6 @@
       margin-left: auto;
       margin-right: auto;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
@@ -136,19 +79,15 @@
       overflow: hidden;
       font-size: 0.95rem;
     }
-
     th, td {
       padding: 12px 10px;
       border-bottom: 1px solid #455a64;
       text-align: center;
     }
-
     th {
       background-color: #455a64;
       font-weight: 600;
     }
-
-    /* Scrollbar oscuro */
     ::-webkit-scrollbar {
       width: 10px;
       height: 10px;
@@ -167,55 +106,202 @@
 </head>
 <body>
   <div class="container">
+    
     <!-- Apriori Section -->
     <div class="section">
-      <h2>Reglas de Asociación (Apriori)</h2>
-      <form id="form-apriori" enctype="multipart/form-data">
-        <label for="file-apriori">Subir CSV para Apriori:</label>
-        <input type="file" id="file-apriori" name="file" />
-        <button type="submit">Visualizar Reglas</button>
-      </form>
-      <div class="graph-container">
-        <div class="left-space"></div>
-        <div class="plot-area">
-          <canvas id="aprioriPlot" width="600" height="400"></canvas>
-          <p><strong>Gráfico de soporte vs confianza</strong></p>
-        </div>
-        <div class="right-space"></div>
-      </div>
+    <h2>Reglas de Asociación (Apriori)</h2>
+    <div class="table-area">
+        <h3>Top 15 Reglas de Asociación por 'Lift'</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Antecedentes</th>
+                    <th>Consecuentes</th>
+                    <th>Soporte</th>
+                    <th>Confianza</th>
+                    <th>Lift</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Weight: alta, FAF: baja</td>
+                    <td>Age: alta, CH2O: alta</td>
+                    <td>0.0535</td>
+                    <td>0.4264</td>
+                    <td>3.5026</td>
+                </tr>
+                <tr>
+                    <td>Age: alta, CH2O: alta</td>
+                    <td>Weight: alta, FAF: baja</td>
+                    <td>0.0535</td>
+                    <td>0.4397</td>
+                    <td>3.5026</td>
+                </tr>
+                <tr>
+                    <td>Weight: alta, Age: alta</td>
+                    <td>FAF: baja, CH2O: alta</td>
+                    <td>0.0535</td>
+                    <td>0.2890</td>
+                    <td>3.0352</td>
+                </tr>
+                <tr>
+                    <td>FAF: baja, CH2O: alta</td>
+                    <td>Weight: alta, Age: alta</td>
+                    <td>0.0535</td>
+                    <td>0.5622</td>
+                    <td>3.0352</td>
+                </tr>
+                <tr>
+                    <td>Weight: alta</td>
+                    <td>Age: alta, FAF: baja, CH2O: alta</td>
+                    <td>0.0535</td>
+                    <td>0.1574</td>
+                    <td>2.4793</td>
+                </tr>
+                <tr>
+                    <td>Age: alta, FAF: baja, CH2O: alta</td>
+                    <td>Weight: alta</td>
+                    <td>0.0535</td>
+                    <td>0.8433</td>
+                    <td>2.4793</td>
+                </tr>
+                <tr>
+                    <td>Weight: alta, FAF: baja, CH2O: alta</td>
+                    <td>Age: alta</td>
+                    <td>0.0535</td>
+                    <td>0.8188</td>
+                    <td>2.4075</td>
+                </tr>
+                <tr>
+                    <td>Age: alta</td>
+                    <td>Weight: alta, FAF: baja, CH2O: alta</td>
+                    <td>0.0535</td>
+                    <td>0.1574</td>
+                    <td>2.4075</td>
+                </tr>
+                <tr>
+                    <td>Weight: alta, FAF: baja</td>
+                    <td>Age: alta</td>
+                    <td>0.0990</td>
+                    <td>0.7887</td>
+                    <td>2.3188</td>
+                </tr>
+                <tr>
+                    <td>Age: alta</td>
+                    <td>Weight: alta, FAF: baja</td>
+                    <td>0.0990</td>
+                    <td>0.2911</td>
+                    <td>2.3188</td>
+                </tr>
+                <tr>
+                    <td>Age: baja, FAF: baja</td>
+                    <td>Weight: baja</td>
+                    <td>0.0592</td>
+                    <td>0.6983</td>
+                    <td>2.1150</td>
+                </tr>
+                <tr>
+                    <td>Weight: baja</td>
+                    <td>Age: baja, FAF: baja</td>
+                    <td>0.0592</td>
+<td>0.1793</td>
+                    <td>2.1150</td>
+                </tr>
+                <tr>
+                    <td>Weight: baja</td>
+                    <td>Age: baja, CH2O: media</td>
+                    <td>0.0848</td>
+                    <td>0.2568</td>
+                    <td>2.1013</td>
+                </tr>
+                <tr>
+                    <td>Age: baja, CH2O: media</td>
+                    <td>Weight: baja</td>
+                    <td>0.0848</td>
+                    <td>0.6938</td>
+                    <td>2.1013</td>
+                </tr>
+                <tr>
+                    <td>Age: alta, CH2O: alta</td>
+                    <td>Weight: alta</td>
+                    <td>0.0843</td>
+                    <td>0.6926</td>
+                    <td>2.0363</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
+</div>
     <!-- Regresión Lineal Section -->
     <div class="section">
       <h2>Modelo de Regresión Lineal</h2>
-      <form id="form-regresion" enctype="multipart/form-data">
-        <label for="file-regresion">Subir CSV de Regresión:</label>
-        <input type="file" id="file-regresion" name="file" />
-        <button type="submit">Mostrar Regresión</button>
-      </form>
       <div class="graph-container">
         <div class="left-space"></div>
-        <div class="plot-area">
-          <canvas id="regresionPlot" width="600" height="400"></canvas>
-          <p><strong>Visualización de regresión</strong></p>
-        </div>
+            <div class="plot-area">
+            <img src="https://raw.githubusercontent.com/Rektres/DM_Obesity/main/Images/Regresion_Lineal.png" alt="Gráfico de Regresión Lineal" />
+            </div>
         <div class="right-space"></div>
       </div>
     </div>
 
+    <!-- Naive Bayes Section -->
+    <div class="section">
+        <h2>Modelo Naive Bayes</h2>
+        
+        <div class="graph-container">
+            <div class="left-space"></div>
+            <div class="plot-area">
+                <img src="https://raw.githubusercontent.com/Rektres/DM_Obesity/main/Images/NaiveBayes.png" alt="Matriz de Confusión de Naive Bayes" />
+            </div>
+            <div class="right-space"></div>
+        </div>
+
+        <div class="table-area">
+            <h3>Reporte de Clasificación</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Clase</th>
+                        <th>Precisión</th>
+                        <th>Recall</th>
+                        <th>F1-Score</th>
+                        <th>Support</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>No enfermo</td>
+                        <td>0.65</td>
+                        <td>0.57</td>
+                        <td>0.61</td>
+                        <td>77</td>
+                    </tr>
+                    <tr>
+                        <td>Enfermo</td>
+                        <td>0.91</td>
+                        <td>0.93</td>
+                        <td>0.92</td>
+                        <td>346</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Accuracy</td>
+                        <td></td>
+                        <td></td>
+                        <td style="font-weight: bold;">0.87</td>
+                        <td>423</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <!-- Árbol de Decisión Section -->
     <div class="section">
       <h2>Árbol de Decisión - Predicción de NObeyesdad</h2>
-      <form id="form-arbol" enctype="multipart/form-data">
-        <label for="file-arbol">Subir CSV Árbol de Decisión:</label>
-        <input type="file" id="file-arbol" name="file" />
-        <button type="submit">Visualizar Árbol</button>
-      </form>
       <div class="graph-container">
         <div class="left-space"></div>
         <div class="plot-area">
-          <img id="arbolImagen" src="arbol_decision.png" alt="Árbol de Decisión" />
-        </div>
+        <img id="arbolImagen" src="https://raw.githubusercontent.com/Rektres/DM_Obesity/main/Images/ArbolDesicion.png" alt="Árbol de Decisión para NObeyesdad" />
+        </div>        
         <div class="right-space"></div>
       </div>
       <div class="table-area">
@@ -245,17 +331,11 @@
     <!-- Clustering Section -->
     <div class="section">
       <h2>Clustering de Tipos de Persona (K-Means)</h2>
-      <form id="form-clustering" enctype="multipart/form-data">
-        <label for="file-clustering">Subir CSV de Clustering:</label>
-        <input type="file" id="file-clustering" name="file" />
-        <button type="submit">Visualizar Clusters</button>
-      </form>
       <div class="graph-container">
         <div class="left-space"></div>
         <div class="plot-area">
-          <canvas id="clusteringPlot" width="600" height="400"></canvas>
-          <p><strong>Visualización de los clusters en espacio PCA</strong></p>
-        </div>
+        <img id="clustering" src="https://raw.githubusercontent.com/Rektres/DM_Obesity/main/Images/clustering.png" alt="clustering" />
+        </div>   
         <div class="right-space"></div>
       </div>
       <div class="table-area">
@@ -273,194 +353,16 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Llenado dinámico -->
+            <tr><td>0</td><td>25.3</td><td>60.1</td><td>0.10</td><td>2.0</td><td>0.2</td><td>0.3</td></tr>
+            <tr><td>1</td><td>35.1</td><td>92.5</td><td>0.12</td><td>1.1</td><td>0.4</td><td>0.2</td></tr>
+            <tr><td>2</td><td>27.8</td><td>70.2</td><td>0.08</td><td>2.5</td><td>0.1</td><td>0.5</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-
-    <script>
-
-// ---------- Apriori: tabla de reglas ----------
-document.getElementById('aprioriCSV').addEventListener('change', function (e) {
-    const reader = new FileReader();
-    reader.onload = function () {
-        const lines = reader.result.split('\n').slice(1, 11); // Solo 10 reglas
-        const tableBody = document.getElementById('aprioriTableBody');
-        tableBody.innerHTML = '';
-        lines.forEach(line => {
-            const cells = line.split(',');
-            if (cells.length >= 4) {
-                const row = document.createElement('tr');
-                cells.forEach(cell => {
-                    const td = document.createElement('td');
-                    td.textContent = cell;
-                    row.appendChild(td);
-                });
-                tableBody.appendChild(row);
-            }
-        });
-    };
-    reader.readAsText(e.target.files[0]);
-});
-
-// ---------- Regresión Lineal ----------
-document.getElementById('regresionCSV').addEventListener('change', function (e) {
-    const reader = new FileReader();
-    reader.onload = function () {
-        const lines = reader.result.split('\n').slice(1);
-        const x = [], y = [];
-        lines.forEach(line => {
-            const parts = line.split(',');
-            if (parts.length >= 2) {
-                x.push(parseFloat(parts[0]));
-                y.push(parseFloat(parts[1]));
-            }
-        });
-
-        const trace = {
-            x: x,
-            y: y,
-            mode: 'markers',
-            type: 'scatter',
-            name: 'Datos',
-            marker: { color: 'rgba(0, 150, 255, 0.6)' }
-        };
-
-        // Cálculo de la recta de regresión simple (y = mx + b)
-        const n = x.length;
-        const sumX = x.reduce((a, b) => a + b, 0);
-        const sumY = y.reduce((a, b) => a + b, 0);
-        const sumXY = x.reduce((acc, xi, i) => acc + xi * y[i], 0);
-        const sumX2 = x.reduce((acc, xi) => acc + xi * xi, 0);
-        const m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-        const b = (sumY - m * sumX) / n;
-
-        const xLine = [Math.min(...x), Math.max(...x)];
-        const yLine = xLine.map(xi => m * xi + b);
-
-        const traceLine = {
-            x: xLine,
-            y: yLine,
-            mode: 'lines',
-            name: 'Regresión Lineal',
-            line: { color: 'red' }
-        };
-
-        const layout = {
-            title: 'Gráfico de Regresión Lineal',
-            xaxis: { title: 'X' },
-            yaxis: { title: 'Y' }
-        };
-
-        Plotly.newPlot('regresionPlot', [trace, traceLine], layout);
-    };
-    reader.readAsText(e.target.files[0]);
-});
-
-// ---------- Naive Bayes: matriz de confusión ----------
-document.getElementById('naiveCSV').addEventListener('change', function (e) {
-    const reader = new FileReader();
-    reader.onload = function () {
-        const heatmapData = {
-            z: [[44, 33], [24, 322]], // Matriz de confusión fija
-            x: ['No', 'Yes'],
-            y: ['No', 'Yes'],
-            type: 'heatmap',
-            colorscale: 'Blues'
-        };
-
-        const layout = {
-            title: 'Matriz de Confusión - Naive Bayes',
-            xaxis: { title: 'Predicción' },
-            yaxis: { title: 'Real' },
-            annotations: [],
-            margin: { t: 50 }
-        };
-
-        // Añadir anotaciones
-        heatmapData.z.forEach((row, i) => {
-            row.forEach((val, j) => {
-                layout.annotations.push({
-                    x: heatmapData.x[j],
-                    y: heatmapData.y[i],
-                    text: val.toString(),
-                    showarrow: false
-                });
-            });
-        });
-
-        Plotly.newPlot('naivePlot', [heatmapData], layout);
-
-        // Métricas
-        const metrics = `
-            <pre>
-Reporte de clasificación:
-              precision    recall  f1-score   support
-  No enfermo       0.65      0.57      0.61        77
-     Enfermo       0.91      0.93      0.92       346
-
-    accuracy                           0.87       423
-   macro avg       0.78      0.75      0.76       423
-weighted avg       0.86      0.87      0.86       423
-            </pre>
-        `;
-        document.getElementById('naiveMetrics').innerHTML = metrics;
-    };
-    reader.readAsText(e.target.files[0]);
-});
-
-// ---------- Árbol de Decisión ----------
-document.getElementById('treeCSV').addEventListener('change', function (e) {
-    const reader = new FileReader();
-    reader.onload = function () {
-        const treeImage = document.getElementById('treeImage');
-        treeImage.src = 'static/arbol_decision.png'; // Backend debe generar esto
-        treeImage.style.display = 'block';
-
-        const tabla = `
-            <pre>
-Distribución de género por clase predicha (entrenamiento):
-
-                     # Hombres  # Mujeres  % Hombres  % Mujeres
-Normal_Weight              244        134      64.55      35.45
-Obesity_Type_I              13        102      11.30      88.70
-Obesity_Type_II              0        149       0.00     100.00
-Obesity_Type_III           260        173      60.05      39.95
-Overweight_Level_I         132         89      59.73      40.27
-Overweight_Level_II        185        207      47.19      52.81
-            </pre>
-        `;
-        document.getElementById('treeMetrics').innerHTML = tabla;
-    };
-    reader.readAsText(e.target.files[0]);
-});
-
-// ---------- Clustering ----------
-document.getElementById('clusterCSV').addEventListener('change', function (e) {
-    const reader = new FileReader();
-    reader.onload = function () {
-        // En este ejemplo asumimos que el backend genera el gráfico como imagen
-        const clusterImage = document.getElementById('clusterImage');
-        clusterImage.src = 'static/clustering.png'; // Ruta generada por Flask
-        clusterImage.style.display = 'block';
-
-        const tabla = `
-            <pre>
-Características de cada tipo de Persona (centroides):
-
-   Age  Weight  SMOKE  CH2O  SCC  FAF  Cluster
-0  25.3   60.1   0.10   2.0  0.2  0.3        0
-1  35.1   92.5   0.12   1.1  0.4  0.2        1
-2  27.8   70.2   0.08   2.5  0.1  0.5        2
-            </pre>
-        `;
-        document.getElementById('clusterInfo').innerHTML = tabla;
-    };
-    reader.readAsText(e.target.files[0]);
-});
-    </script>
-
+<script>
+ 
+</script>
 </body>
 </html>
