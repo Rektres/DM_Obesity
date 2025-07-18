@@ -166,114 +166,119 @@
   </style>
 </head>
 <body>
-
+  <div class="container">
     <!-- Apriori Section -->
     <div class="section">
-        <h2>Reglas de Asociación (Apriori)</h2>
-        <form id="form-apriori" enctype="multipart/form-data">
-            <label for="file-apriori">Subir CSV para Apriori:</label>
-            <input type="file" id="file-apriori" name="file">
-            <button type="submit">Visualizar Reglas</button>
-        </form>
-        <div class="graph-container">
-            <div class="left-space"></div>
-            <div class="plot-area">
-                <canvas id="aprioriPlot" width="600" height="400"></canvas>
-                <p><strong>Gráfico de soporte vs confianza</strong></p>
-            </div>
-            <div class="right-space"></div>
+      <h2>Reglas de Asociación (Apriori)</h2>
+      <form id="form-apriori" enctype="multipart/form-data">
+        <label for="file-apriori">Subir CSV para Apriori:</label>
+        <input type="file" id="file-apriori" name="file" />
+        <button type="submit">Visualizar Reglas</button>
+      </form>
+      <div class="graph-container">
+        <div class="left-space"></div>
+        <div class="plot-area">
+          <canvas id="aprioriPlot" width="600" height="400"></canvas>
+          <p><strong>Gráfico de soporte vs confianza</strong></p>
         </div>
+        <div class="right-space"></div>
+      </div>
     </div>
 
     <!-- Regresión Lineal Section -->
     <div class="section">
-        <h2>Modelo de Regresión Lineal</h2>
-        <form id="form-regresion" enctype="multipart/form-data">
-            <label for="file-regresion">Subir CSV de Regresión:</label>
-            <input type="file" id="file-regresion" name="file">
-            <button type="submit">Mostrar Regresión</button>
-        </form>
-        <div class="graph-container">
-            <div class="left-space"></div>
-            <div class="plot-area">
-                <canvas id="regresionPlot" width="600" height="400"></canvas>
-                <p><strong>Visualización de regresión</strong></p>
-            </div>
-            <div class="right-space"></div>
+      <h2>Modelo de Regresión Lineal</h2>
+      <form id="form-regresion" enctype="multipart/form-data">
+        <label for="file-regresion">Subir CSV de Regresión:</label>
+        <input type="file" id="file-regresion" name="file" />
+        <button type="submit">Mostrar Regresión</button>
+      </form>
+      <div class="graph-container">
+        <div class="left-space"></div>
+        <div class="plot-area">
+          <canvas id="regresionPlot" width="600" height="400"></canvas>
+          <p><strong>Visualización de regresión</strong></p>
         </div>
+        <div class="right-space"></div>
+      </div>
     </div>
 
     <!-- Árbol de Decisión Section -->
     <div class="section">
-        <h2>Árbol de Decisión - Predicción de NObeyesdad</h2>
-        <form id="form-arbol" enctype="multipart/form-data">
-            <label for="file-arbol">Subir CSV Árbol de Decisión:</label>
-            <input type="file" id="file-arbol" name="file">
-            <button type="submit">Visualizar Árbol</button>
-        </form>
-        <div class="graph-container">
-            <div class="left-space"></div>
-            <div class="plot-area">
-                <img id="arbolImagen" src="arbol_decision.png" alt="Árbol de Decisión">
-            </div>
-            <div class="right-space"></div>
+      <h2>Árbol de Decisión - Predicción de NObeyesdad</h2>
+      <form id="form-arbol" enctype="multipart/form-data">
+        <label for="file-arbol">Subir CSV Árbol de Decisión:</label>
+        <input type="file" id="file-arbol" name="file" />
+        <button type="submit">Visualizar Árbol</button>
+      </form>
+      <div class="graph-container">
+        <div class="left-space"></div>
+        <div class="plot-area">
+          <img id="arbolImagen" src="arbol_decision.png" alt="Árbol de Decisión" />
         </div>
-        <div class="table-area">
-            <h3>Distribución de género por clase predicha (entrenamiento)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Clase</th><th># Hombres</th><th># Mujeres</th><th>% Hombres</th><th>% Mujeres</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>Normal_Weight</td><td>244</td><td>134</td><td>64.55%</td><td>35.45%</td></tr>
-                    <tr><td>Obesity_Type_I</td><td>13</td><td>102</td><td>11.30%</td><td>88.70%</td></tr>
-                    <tr><td>Obesity_Type_II</td><td>0</td><td>149</td><td>0.00%</td><td>100.00%</td></tr>
-                    <tr><td>Obesity_Type_III</td><td>260</td><td>173</td><td>60.05%</td><td>39.95%</td></tr>
-                    <tr><td>Overweight_Level_I</td><td>132</td><td>89</td><td>59.73%</td><td>40.27%</td></tr>
-                    <tr><td>Overweight_Level_II</td><td>185</td><td>207</td><td>47.19%</td><td>52.81%</td></tr>
-                </tbody>
-            </table>
-        </div>
+        <div class="right-space"></div>
+      </div>
+      <div class="table-area">
+        <h3>Distribución de género por clase predicha (entrenamiento)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Clase</th>
+              <th># Hombres</th>
+              <th># Mujeres</th>
+              <th>% Hombres</th>
+              <th>% Mujeres</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Normal_Weight</td><td>244</td><td>134</td><td>64.55%</td><td>35.45%</td></tr>
+            <tr><td>Obesity_Type_I</td><td>13</td><td>102</td><td>11.30%</td><td>88.70%</td></tr>
+            <tr><td>Obesity_Type_II</td><td>0</td><td>149</td><td>0.00%</td><td>100.00%</td></tr>
+            <tr><td>Obesity_Type_III</td><td>260</td><td>173</td><td>60.05%</td><td>39.95%</td></tr>
+            <tr><td>Overweight_Level_I</td><td>132</td><td>89</td><td>59.73%</td><td>40.27%</td></tr>
+            <tr><td>Overweight_Level_II</td><td>185</td><td>207</td><td>47.19%</td><td>52.81%</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Clustering Section -->
     <div class="section">
-        <h2>Clustering de Tipos de Persona (K-Means)</h2>
-        <form id="form-clustering" enctype="multipart/form-data">
-            <label for="file-clustering">Subir CSV de Clustering:</label>
-            <input type="file" id="file-clustering" name="file">
-            <button type="submit">Visualizar Clusters</button>
-        </form>
-        <div class="graph-container">
-            <div class="left-space"></div>
-            <div class="plot-area">
-                <canvas id="clusteringPlot" width="600" height="400"></canvas>
-                <p><strong>Visualización de los clusters en espacio PCA</strong></p>
-            </div>
-            <div class="right-space"></div>
+      <h2>Clustering de Tipos de Persona (K-Means)</h2>
+      <form id="form-clustering" enctype="multipart/form-data">
+        <label for="file-clustering">Subir CSV de Clustering:</label>
+        <input type="file" id="file-clustering" name="file" />
+        <button type="submit">Visualizar Clusters</button>
+      </form>
+      <div class="graph-container">
+        <div class="left-space"></div>
+        <div class="plot-area">
+          <canvas id="clusteringPlot" width="600" height="400"></canvas>
+          <p><strong>Visualización de los clusters en espacio PCA</strong></p>
         </div>
-        <div class="table-area">
-            <h3>Características de cada tipo de persona</h3>
-            <table border="1" id="centroids-table">
-                <thead>
-                    <tr>
-                        <th>Cluster</th>
-                        <th>Age</th>
-                        <th>Weight</th>
-                        <th>SMOKE</th>
-                        <th>CH2O</th>
-                        <th>SCC</th>
-                        <th>FAF</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Llenado dinámico -->
-                </tbody>
-            </table>
-        </div>
+        <div class="right-space"></div>
+      </div>
+      <div class="table-area">
+        <h3>Características de cada tipo de persona</h3>
+        <table border="1" id="centroids-table">
+          <thead>
+            <tr>
+              <th>Cluster</th>
+              <th>Age</th>
+              <th>Weight</th>
+              <th>SMOKE</th>
+              <th>CH2O</th>
+              <th>SCC</th>
+              <th>FAF</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Llenado dinámico -->
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 
     <script>
 
