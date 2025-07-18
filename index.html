@@ -1,264 +1,238 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Minería de Datos - Obesidad</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.2.0/dist/chartjs-chart-matrix.min.js"></script>
     <style>
-        body {
+        /* Reset y base */
+        body, html {
+            margin: 0; padding: 0; height: 100%;
             background-color: #121212;
-            font-family: 'Segoe UI', sans-serif;
-            color: #f5f5f5;
-            margin: 0;
-            padding: 0;
+            color: #eee;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         header {
             background-color: #1e1e1e;
             padding: 20px;
             text-align: center;
             border-bottom: 2px solid #333;
         }
-
         h1, h2 {
-            color: #e0e0e0;
+            margin: 10px 0;
         }
 
-        .container {
-            padding: 30px;
+        /* Layout general */
+        .page-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 30px;
+            box-sizing: border-box;
         }
 
+        /* Lateral para imágenes decorativas */
+        .sidebar-left {
+            width: 150px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            /* solo placeholder */
+            color: #666;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+
+        /* Contenedor central */
+        .content-wrapper {
+            max-width: 900px;
+            width: 100%;
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 25px 40px;
+            box-sizing: border-box;
+            box-shadow: 0 0 15px #000000cc;
+        }
+
+        /* Sección individual */
+        section {
+            margin-bottom: 50px;
+        }
+
+        /* Tabla apriori */
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #1c1c1c;
-            margin-bottom: 40px;
+            background-color: #292929;
+            color: #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
-
         th, td {
             padding: 12px;
             text-align: center;
-            border: 1px solid #333;
+            border-bottom: 1px solid #444;
         }
-
         th {
-            background-color: #333;
-            color: #ffffff;
+            background-color: #383838;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #3d3d3d;
         }
 
-        canvas {
-            background-color: #1c1c1c;
-            margin-top: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #00000099;
+        /* Form upload */
+        .upload-wrapper {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        input[type="file"] {
+            background-color: #292929;
+            color: #eee;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        input[type="file"]::file-selector-button {
+            background-color: #555;
+            color: #eee;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
         }
 
-        .chart-container {
-            margin-bottom: 60px;
+        /* Títulos y subtítulos */
+        h2 {
+            border-bottom: 2px solid #444;
+            padding-bottom: 6px;
+            margin-bottom: 20px;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Minería de Datos - Obesidad</h1>
-        <p>Visualización de Modelos de Machine Learning</p>
-    </header>
 
-    <div class="container">
+<header>
+    <h1>Minería de Datos - Obesidad</h1>
+    <p>Visualización y Análisis de Modelos</p>
+</header>
 
-        <h2>Reglas Apriori Detectadas</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Antecedente</th>
-                    <th>Consecuente</th>
-                    <th>Soporte</th>
-                    <th>Confianza</th>
-                    <th>Lift</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>{Calorías Altas}</td><td>{Obesidad}</td><td>0.32</td><td>0.75</td><td>1.24</td></tr>
-                <tr><td>{Sedentarismo}</td><td>{Obesidad}</td><td>0.29</td><td>0.70</td><td>1.15</td></tr>
-                <tr><td>{Edad > 40}</td><td>{Obesidad}</td><td>0.25</td><td>0.68</td><td>1.12</td></tr>
-                <tr><td>{IMC > 30}</td><td>{Obesidad}</td><td>0.35</td><td>0.88</td><td>1.31</td></tr>
-                <tr><td>{Genética}</td><td>{Obesidad}</td><td>0.20</td><td>0.65</td><td>1.10</td></tr>
-                <tr><td>{Azúcar Alta}</td><td>{Obesidad}</td><td>0.27</td><td>0.72</td><td>1.18</td></tr>
-                <tr><td>{Comida Chatarra}</td><td>{Obesidad}</td><td>0.30</td><td>0.76</td><td>1.22</td></tr>
-                <tr><td>{No actividad física}</td><td>{Obesidad}</td><td>0.31</td><td>0.80</td><td>1.25</td></tr>
-                <tr><td>{Sueño < 6 hrs}</td><td>{Obesidad}</td><td>0.23</td><td>0.66</td><td>1.09</td></tr>
-                <tr><td>{Estrés Crónico}</td><td>{Obesidad}</td><td>0.28</td><td>0.70</td><td>1.16</td></tr>
-            </tbody>
-        </table>
-
-        <div class="chart-container">
-            <h2>Regresión Lineal: IMC vs Edad</h2>
-            <canvas id="regresionLineal" width="600" height="300"></canvas>
-        </div>
-
-        <div class="chart-container">
-            <h2>Naive Bayes: Matriz de Confusión</h2>
-            <canvas id="matrizConfusion" width="300" height="300"></canvas>
-        </div>
-
-        <div class="chart-container">
-            <h2>Árbol de Decisión</h2>
-            <canvas id="arbolDecision" width="600" height="300"></canvas>
-        </div>
-
-        <div class="chart-container">
-            <h2>Clustering K=3: Distribución</h2>
-            <canvas id="clustering" width="600" height="300"></canvas>
-        </div>
-
+<div class="page-wrapper">
+    <div class="sidebar-left" id="sidebar-apriori">
+        <p>Imágenes decorativas<br>sección Apriori</p>
+        <!-- Aquí podrás importar imágenes con JS o HTML -->
     </div>
 
-    <script>
-        // Gráfico de Regresión Lineal
-        const ctxLineal = document.getElementById('regresionLineal').getContext('2d');
-        new Chart(ctxLineal, {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Datos IMC vs Edad',
-                    data: [
-                        {x: 18, y: 22}, {x: 25, y: 24}, {x: 30, y: 26}, {x: 40, y: 29}, {x: 50, y: 32}, {x: 60, y: 35}
-                    ],
-                    backgroundColor: '#00BCD4',
-                },
-                {
-                    label: 'Línea de Regresión',
-                    type: 'line',
-                    data: [
-                        {x: 18, y: 21},
-                        {x: 60, y: 35}
-                    ],
-                    borderColor: '#FF5722',
-                    borderWidth: 2,
-                    fill: false
-                }]
-            },
-            options: {
-                scales: {
-                    x: { title: { display: true, text: 'Edad' } },
-                    y: { title: { display: true, text: 'IMC' } }
-                }
-            }
-        });
+    <div class="content-wrapper">
+        <section id="apriori-section">
+            <h2>Reglas Apriori Detectadas</h2>
 
-        // Matriz de Confusión (Naive Bayes)
-        const ctxMatrix = document.getElementById('matrizConfusion').getContext('2d');
-        new Chart(ctxMatrix, {
-            type: 'matrix',
-            data: {
-                datasets: [{
-                    label: 'Matriz de Confusión',
-                    data: [
-                        {x: 0, y: 0, v: 45}, {x: 1, y: 0, v: 5},
-                        {x: 0, y: 1, v: 8}, {x: 1, y: 1, v: 42}
-                    ],
-                    backgroundColor: ctx => {
-                        const value = ctx.dataset.data[ctx.dataIndex].v;
-                        return value > 40 ? '#66bb6a' : '#ef5350';
-                    },
-                    width: 80,
-                    height: 80
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            title: () => '',
-                            label: ctx => `Valor: ${ctx.raw.v}`
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        labels: ['No Obeso', 'Obeso'],
-                        ticks: { stepSize: 1 },
-                        title: { display: true, text: 'Predicción' }
-                    },
-                    y: {
-                        labels: ['No Obeso', 'Obeso'],
-                        ticks: { stepSize: 1 },
-                        title: { display: true, text: 'Real' }
-                    }
-                }
-            }
-        });
+            <div class="upload-wrapper">
+                <label for="uploadAprioriCsv">Subir CSV de reglas Apriori:</label><br/>
+                <input type="file" id="uploadAprioriCsv" accept=".csv" />
+            </div>
 
-        // Árbol de decisión (dummy visual como gráfico de barras)
-        const ctxTree = document.getElementById('arbolDecision').getContext('2d');
-        new Chart(ctxTree, {
-            type: 'bar',
-            data: {
-                labels: ['Edad', 'IMC', 'Actividad', 'Alimentación'],
-                datasets: [{
-                    label: 'Importancia de Atributos',
-                    data: [0.3, 0.4, 0.2, 0.1],
-                    backgroundColor: ['#2196f3', '#4caf50', '#ff9800', '#9c27b0']
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Importancia' }
-                    }
-                }
-            }
-        });
+            <table id="tablaApriori">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Antecedente</th>
+                        <th>Consecuente</th>
+                        <th>Soporte</th>
+                        <th>Confianza</th>
+                        <th>Lift</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Se llena con JS -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
 
-        // Gráfico de Clustering
-        const ctxCluster = document.getElementById('clustering').getContext('2d');
-        new Chart(ctxCluster, {
-            type: 'scatter',
-            data: {
-                datasets: [
-                    {
-                        label: 'Cluster 1',
-                        data: [{x: 2, y: 3}, {x: 2.2, y: 3.5}, {x: 1.8, y: 2.9}],
-                        backgroundColor: '#f44336'
-                    },
-                    {
-                        label: 'Cluster 2',
-                        data: [{x: 6, y: 7}, {x: 5.8, y: 6.7}, {x: 6.2, y: 7.3}],
-                        backgroundColor: '#4caf50'
-                    },
-                    {
-                        label: 'Cluster 3',
-                        data: [{x: 9, y: 2}, {x: 8.8, y: 2.2}, {x: 9.2, y: 1.8}],
-                        backgroundColor: '#2196f3'
-                    },
-                    {
-                        label: 'Centroides',
-                        data: [{x: 2, y: 3}, {x: 6, y: 7}, {x: 9, y: 2}],
-                        pointStyle: 'cross',
-                        backgroundColor: 'white',
-                        borderColor: 'yellow',
-                        borderWidth: 2,
-                        radius: 10
-                    }
-                ]
-            },
-            options: {
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: ctx => `(${ctx.raw.x}, ${ctx.raw.y})`
-                        }
-                    }
-                },
-                scales: {
-                    x: { title: { display: true, text: 'Componente 1 (PCA)' } },
-                    y: { title: { display: true, text: 'Componente 2 (PCA)' } }
-                }
-            }
+<script>
+    // Función para renderizar la tabla apriori con un array de reglas
+    function renderAprioriTabla(reglas) {
+        const tbody = document.querySelector("#tablaApriori tbody");
+        tbody.innerHTML = ""; // limpio tabla
+        reglas.forEach((regla, index) => {
+            const fila = document.createElement("tr");
+            fila.innerHTML = `
+                <td>${index + 1}</td>
+                <td>{${regla.antecedente.join(', ')}}</td>
+                <td>{${regla.consecuente.join(', ')}}</td>
+                <td>${(regla.soporte * 100).toFixed(2)}%</td>
+                <td>${regla.confianza !== undefined ? (regla.confianza * 100).toFixed(2) + '%' : '-'}</td>
+                <td>${regla.lift !== undefined ? regla.lift.toFixed(2) : '-'}</td>
+            `;
+            tbody.appendChild(fila);
         });
-    </script>
+    }
+
+    // Datos simulados iniciales para mostrar al cargar página
+    const reglasSimuladas = [
+        { antecedente: ['Comida Chatarra'], consecuente: ['Obesidad'], soporte: 0.30, confianza: 0.85, lift: 1.25 },
+        { antecedente: ['Sedentarismo'], consecuente: ['Obesidad'], soporte: 0.28, confianza: 0.82, lift: 1.22 },
+        { antecedente: ['Azúcar Alta'], consecuente: ['Obesidad'], soporte: 0.25, confianza: 0.79, lift: 1.18 },
+        { antecedente: ['Genética'], consecuente: ['Obesidad'], soporte: 0.20, confianza: 0.75, lift: 1.15 },
+        { antecedente: ['No ejercicio'], consecuente: ['Obesidad'], soporte: 0.27, confianza: 0.80, lift: 1.21 },
+        { antecedente: ['Sueño < 6 hrs'], consecuente: ['Obesidad'], soporte: 0.23, confianza: 0.78, lift: 1.14 },
+        { antecedente: ['Estrés'], consecuente: ['Obesidad'], soporte: 0.21, confianza: 0.74, lift: 1.13 },
+        { antecedente: ['Edad > 45'], consecuente: ['Obesidad'], soporte: 0.26, confianza: 0.81, lift: 1.20 },
+        { antecedente: ['Comida Chatarra', 'Azúcar Alta'], consecuente: ['Obesidad'], soporte: 0.18, confianza: 0.86, lift: 1.28 },
+        { antecedente: ['Sedentarismo', 'Sueño < 6 hrs'], consecuente: ['Obesidad'], soporte: 0.19, confianza: 0.83, lift: 1.26 }
+    ];
+    renderAprioriTabla(reglasSimuladas);
+
+    // Parsear CSV y renderizar tabla Apriori
+    function parseCsv(text) {
+        const lines = text.trim().split('\n');
+        const keys = lines[0].split(',');
+        const data = lines.slice(1).map(line => {
+            const values = line.split(',');
+            // Ejemplo: 'antecedente' y 'consecuente' deben venir como listas separadas por ;
+            // soporte, confianza y lift como floats
+            return {
+                antecedente: values[0].split(';').map(s => s.trim()),
+                consecuente: values[1].split(';').map(s => s.trim()),
+                soporte: parseFloat(values[2]),
+                confianza: values[3] ? parseFloat(values[3]) : undefined,
+                lift: values[4] ? parseFloat(values[4]) : undefined
+            };
+        });
+        return data;
+    }
+
+    // Listener para input file
+    document.getElementById('uploadAprioriCsv').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+            try {
+                const reglas = parseCsv(ev.target.result);
+                renderAprioriTabla(reglas);
+            } catch(err) {
+                alert('Error leyendo el archivo CSV: ' + err.message);
+            }
+        };
+        reader.readAsText(file);
+    });
+</script>
+
 </body>
 </html>
