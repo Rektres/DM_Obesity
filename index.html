@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <title>Minería de Datos - Obesidad</title>
+    <!-- Añade este script en HEAD o antes del script arriba -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.2.0/dist/chartjs-chart-matrix.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Reset y base */
@@ -195,7 +198,30 @@
         </section>
     </div>
 </div>
+    
+<!-- NAIVE BAYES -->
+<div class="page-wrapper">
+    <div class="sidebar-left" id="sidebar-naivebayes">
+        <p>Imágenes decorativas<br>sección Naive Bayes</p>
+    </div>
 
+    <div class="content-wrapper" id="content-naivebayes">
+        <section id="naivebayes-section">
+            <h2>Matriz de Confusión - Naive Bayes</h2>
+
+            <div class="upload-wrapper">
+                <label for="uploadNaiveBayesCsv">Subir CSV matriz de confusión (2x2):</label><br/>
+                <input type="file" id="uploadNaiveBayesCsv" accept=".csv" />
+            </div>
+
+            <canvas id="chartNaiveBayes"></canvas>
+
+            <div id="classification-report" style="margin-top: 20px; background: #292929; padding: 15px; border-radius: 12px; color: #eee; font-family: monospace; white-space: pre-wrap;">
+                <!-- Reporte se carga aquí -->
+            </div>
+        </section>
+    </div>
+</div>
 <script>
     // -------------------
     // APRIORI - Tabla
@@ -370,7 +396,125 @@
         };
         reader.readAsText(file);
     });
+ // Inicialización matriz con datos ejemplo
+    const matrizConfusionEjemplo = [
+        [44, 33],
+        [24, 322]
+    ];
 
+    const reporteClasificacionEjemplo = `
+Reporte de clasificación:
+              precision    recall  f1-score   support
+
+  No enfermo       0.65      0.57      0.61        77
+     Enfermo       0.91      0.93      0.92       346
+
+    accuracy                           0.87       423
+   macro avg       0.78      0.75      0.76       423
+weighted avg       0.86      0.87      0.86       423
+`;
+
+    // Crear heatmap 2x2 con Chart.js
+    const ctxNB = document.getElementById('chartNaiveBayes').getContext('2d');
+    let chartNB;
+
+    function renderHeatmap(matriz, report) {
+        if(chartNB) chartNB.destroy();
+
+        const data = {
+            labels: ['No', 'Yes'],
+            datasets: [{
+                label: 'Matriz de Confusión',
+                data: matriz.flat(),
+                backgroundColor: matriz.flat().map(val => {
+                    // Color azul degradado según valor
+                    const maxVal = Math.max(...matriz.flat());
+                    const alpha = val / maxVal * 0.9 + 0.1;
+                    return `rgba(30, 90, 180, ${alpha})`;
+                }),
+                borderWidth: 1,
+                borderColor: 'rgba(255,255,255,0.3)',
+                hoverBorderColor: 'rgba(255,255,255,0.8)'
+            }]
+        };
+
+        const options = {
+            indexAxis: 'y',
+            scales: {
+                x: {
+                    type: 'category',
+                    labels: ['No', 'Yes'],
+                    ticks: { color: '#eee' },
+                    grid: { color: '#444' }
+                },
+                y: {
+                    type: 'category',
+                    labels: ['No', 'Yes'],
+                    ticks: { color: '#eee' },
+                    grid: { color: '#444' }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => `Valor: ${ctx.raw}`
+                    }
+                },
+                datalabels: {
+                    color: '#fff',
+                    font: { weight: 'bold', size: 20 },
+                    formatter: (val) => val
+                }
+            }
+        };
+
+        // Para los datalabels usaremos el plugin oficial
+        if (!Chart.registeredPlugins?.some(p => p.id === 'datalabels')) {
+            Chart.register(window['ChartDataLabels']);
+        }
+
+        chartNB = new Chart(ctxNB, {
+            type: 'matrix',
+            data,
+            options,
+            plugins: [ChartDataLabels]
+        });
+
+        // Mostrar reporte
+        document.getElementById('classification-report').textContent = report;
+    }
+
+    // Inicial con ejemplo
+    renderHeatmap(matrizConfusionEjemplo, reporteClasificacionEjemplo);
+
+    // Parsear CSV matriz confusión (esperamos 2x2 con 2 filas, 2 cols)
+    function parseCsvNaiveBayes(text) {
+        const lines = text.trim().split('\n');
+        if (lines.length !== 2) throw new Error("CSV debe tener 2 filas.");
+        const matriz = lines.map(line => {
+            const valores = line.split(',').map(s => parseInt(s.trim()));
+            if (valores.length !== 2) throw new Error("Cada fila debe tener 2 columnas.");
+            return valores;
+        });
+        return matriz;
+    }
+
+    // Listener upload matriz
+    document.getElementById('uploadNaiveBayesCsv').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+            try {
+                const matriz = parseCsvNaiveBayes(ev.target.result);
+                renderHeatmap(matriz, reporteClasificacionEjemplo); // Por ahora fijo el reporte
+            } catch(err) {
+                alert('Error leyendo CSV matriz: ' + err.message);
+            }
+        };
+        reader.readAsText(file);
+    });
 </script>
 
 </body>
