@@ -31,6 +31,7 @@
             padding: 20px;
             gap: 30px;
             box-sizing: border-box;
+            flex-wrap: wrap;
         }
 
         /* Lateral para imágenes decorativas */
@@ -59,6 +60,7 @@
             padding: 25px 40px;
             box-sizing: border-box;
             box-shadow: 0 0 15px #000000cc;
+            margin-bottom: 40px;
         }
 
         /* Sección individual */
@@ -114,6 +116,17 @@
             font-weight: 600;
         }
 
+        /* Canvas tamaño fijo para uniformidad */
+        canvas {
+            background-color: #292929;
+            border-radius: 12px;
+            box-shadow: 0 0 10px #000000cc;
+            max-width: 100%;
+            height: 350px !important;
+            display: block;
+            margin: 0 auto;
+        }
+
         /* Títulos y subtítulos */
         h2 {
             border-bottom: 2px solid #444;
@@ -130,13 +143,14 @@
     <p>Visualización y Análisis de Modelos</p>
 </header>
 
+<!-- APRIORI -->
 <div class="page-wrapper">
     <div class="sidebar-left" id="sidebar-apriori">
         <p>Imágenes decorativas<br>sección Apriori</p>
-        <!-- Aquí podrás importar imágenes con JS o HTML -->
+        <!-- Aquí podrás importar imágenes -->
     </div>
 
-    <div class="content-wrapper">
+    <div class="content-wrapper" id="content-apriori">
         <section id="apriori-section">
             <h2>Reglas Apriori Detectadas</h2>
 
@@ -156,19 +170,39 @@
                         <th>Lift</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Se llena con JS -->
-                </tbody>
+                <tbody></tbody>
             </table>
         </section>
     </div>
 </div>
 
+<!-- REGRESION LINEAL -->
+<div class="page-wrapper">
+    <div class="sidebar-left" id="sidebar-regresion">
+        <p>Imágenes decorativas<br>sección Regresión Lineal</p>
+    </div>
+
+    <div class="content-wrapper" id="content-regresion">
+        <section id="regresion-section">
+            <h2>Gráfico de Regresión Lineal</h2>
+
+            <div class="upload-wrapper">
+                <label for="uploadRegresionCsv">Subir CSV (Edad, IMC):</label><br/>
+                <input type="file" id="uploadRegresionCsv" accept=".csv" />
+            </div>
+
+            <canvas id="chartRegresion"></canvas>
+        </section>
+    </div>
+</div>
+
 <script>
-    // Función para renderizar la tabla apriori con un array de reglas
+    // -------------------
+    // APRIORI - Tabla
+    // -------------------
     function renderAprioriTabla(reglas) {
         const tbody = document.querySelector("#tablaApriori tbody");
-        tbody.innerHTML = ""; // limpio tabla
+        tbody.innerHTML = "";
         reglas.forEach((regla, index) => {
             const fila = document.createElement("tr");
             fila.innerHTML = `
@@ -183,7 +217,6 @@
         });
     }
 
-    // Datos simulados iniciales para mostrar al cargar página
     const reglasSimuladas = [
         { antecedente: ['Comida Chatarra'], consecuente: ['Obesidad'], soporte: 0.30, confianza: 0.85, lift: 1.25 },
         { antecedente: ['Sedentarismo'], consecuente: ['Obesidad'], soporte: 0.28, confianza: 0.82, lift: 1.22 },
@@ -198,14 +231,12 @@
     ];
     renderAprioriTabla(reglasSimuladas);
 
-    // Parsear CSV y renderizar tabla Apriori
-    function parseCsv(text) {
+    // CSV parser para Apriori
+    function parseCsvApriori(text) {
         const lines = text.trim().split('\n');
         const keys = lines[0].split(',');
-        const data = lines.slice(1).map(line => {
+        return lines.slice(1).map(line => {
             const values = line.split(',');
-            // Ejemplo: 'antecedente' y 'consecuente' deben venir como listas separadas por ;
-            // soporte, confianza y lift como floats
             return {
                 antecedente: values[0].split(';').map(s => s.trim()),
                 consecuente: values[1].split(';').map(s => s.trim()),
@@ -214,17 +245,14 @@
                 lift: values[4] ? parseFloat(values[4]) : undefined
             };
         });
-        return data;
     }
-
-    // Listener para input file
     document.getElementById('uploadAprioriCsv').addEventListener('change', e => {
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = ev => {
             try {
-                const reglas = parseCsv(ev.target.result);
+                const reglas = parseCsvApriori(ev.target.result);
                 renderAprioriTabla(reglas);
             } catch(err) {
                 alert('Error leyendo el archivo CSV: ' + err.message);
@@ -232,6 +260,117 @@
         };
         reader.readAsText(file);
     });
+
+
+    // -------------------
+    // REGRESION LINEAL - Gráfico con Chart.js
+    // -------------------
+    const ctxRegresion = document.getElementById('chartRegresion').getContext('2d');
+    let chartRegresion;
+
+    // Función para calcular parámetros de regresión lineal simple (y = a + b*x)
+    function calcularRegresionLineal(datos) {
+        const n = datos.length;
+        if (n === 0) return null;
+        const sumX = datos.reduce((acc, p) => acc + p.x, 0);
+        const sumY = datos.reduce((acc, p) => acc + p.y, 0);
+        const sumXY = datos.reduce((acc, p) => acc + p.x * p.y, 0);
+        const sumXX = datos.reduce((acc, p) => acc + p.x * p.x, 0);
+
+        const b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+        const a = (sumY - b * sumX) / n;
+
+        return { a, b };
+    }
+
+    function renderRegresion(datos) {
+        if (chartRegresion) chartRegresion.destroy();
+
+        // Calcular parámetros
+        const {a, b} = calcularRegresionLineal(datos);
+
+        // Crear línea regresión para el rango del x
+        const minX = Math.min(...datos.map(p => p.x));
+        const maxX = Math.max(...datos.map(p => p.x));
+        const lineaRegresion = [
+            {x: minX, y: a + b * minX},
+            {x: maxX, y: a + b * maxX}
+        ];
+
+        chartRegresion = new Chart(ctxRegresion, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'Datos (Edad vs IMC)',
+                        data: datos,
+                        backgroundColor: '#03a9f4',
+                    },
+                    {
+                        label: 'Línea de regresión',
+                        type: 'line',
+                        data: lineaRegresion,
+                        borderColor: '#ff5722',
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Edad' },
+                        beginAtZero: false
+                    },
+                    y: {
+                        title: { display: true, text: 'IMC' },
+                        beginAtZero: false
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#eee'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Datos iniciales simulados
+    const datosSimulados = [
+        {x: 18, y: 22}, {x: 25, y: 24}, {x: 30, y: 26},
+        {x: 40, y: 29}, {x: 50, y: 32}, {x: 60, y: 35}
+    ];
+    renderRegresion(datosSimulados);
+
+    // Parsear CSV para regresión lineal (dos columnas: Edad, IMC)
+    function parseCsvRegresion(text) {
+        const lines = text.trim().split('\n');
+        // Asumimos encabezado
+        return lines.slice(1).map(line => {
+            const [edad, imc] = line.split(',').map(s => s.trim());
+            return { x: parseFloat(edad), y: parseFloat(imc) };
+        });
+    }
+
+    document.getElementById('uploadRegresionCsv').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+            try {
+                const datos = parseCsvRegresion(ev.target.result);
+                renderRegresion(datos);
+            } catch(err) {
+                alert('Error leyendo CSV regresión: ' + err.message);
+            }
+        };
+        reader.readAsText(file);
+    });
+
 </script>
 
 </body>
