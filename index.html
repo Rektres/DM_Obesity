@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Exploración de Datos: Obesidad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            padding: 30px;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2980b9;
+            color: white;
+        }
+        .stats-box {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+        .stat {
+            background: #3498db;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 20%;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        canvas {
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Minería de Datos - Análisis de Obesidad</h1>
+        <p>Visualización interactiva del dataset</p>
+    </header>
+
+    <div class="container">
+        <h2>Estadísticas Generales</h2>
+        <div class="stats-box">
+            <div class="stat">
+                <h3 id="total-personas">0</h3>
+                <p>Total de Personas</p>
+            </div>
+            <div class="stat">
+                <h3 id="promedio-imc">0</h3>
+                <p>Promedio de IMC</p>
+            </div>
+            <div class="stat">
+                <h3 id="obesos">0</h3>
+                <p>Casos de Obesidad</p>
+            </div>
+        </div>
+
+        <h2>Distribución de IMC</h2>
+        <canvas id="chartBMI" width="400" height="150"></canvas>
+
+        <h2>Vista del Dataset</h2>
+        <table id="tablaObesidad">
+            <thead>
+                <tr>
+                    <th>Edad</th>
+                    <th>Género</th>
+                    <th>IMC</th>
+                    <th>Nivel Actividad</th>
+                    <th>Diagnóstico</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Se llenará dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Datos de ejemplo
+        const data = [
+            { edad: 25, genero: 'F', imc: 22.5, actividad: 'Moderada', diagnostico: 'Normal' },
+            { edad: 34, genero: 'M', imc: 31.1, actividad: 'Baja', diagnostico: 'Obesidad' },
+            { edad: 18, genero: 'F', imc: 27.3, actividad: 'Alta', diagnostico: 'Sobrepeso' },
+            { edad: 40, genero: 'M', imc: 35.0, actividad: 'Muy baja', diagnostico: 'Obesidad' }
+        ];
+
+        const tablaBody = document.querySelector("#tablaObesidad tbody");
+        let sumaIMC = 0;
+        let casosObesidad = 0;
+
+        data.forEach(persona => {
+            const fila = document.createElement("tr");
+            fila.innerHTML = `
+                <td>${persona.edad}</td>
+                <td>${persona.genero}</td>
+                <td>${persona.imc}</td>
+                <td>${persona.actividad}</td>
+                <td>${persona.diagnostico}</td>
+            `;
+            tablaBody.appendChild(fila);
+
+            sumaIMC += persona.imc;
+            if (persona.diagnostico === 'Obesidad') casosObesidad++;
+        });
+
+        document.getElementById("total-personas").innerText = data.length;
+        document.getElementById("promedio-imc").innerText = (sumaIMC / data.length).toFixed(2);
+        document.getElementById("obesos").innerText = casosObesidad;
+
+        // Chart.js - Gráfico de barras de IMC
+        const ctx = document.getElementById('chartBMI').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.map((_, i) => `Persona ${i + 1}`),
+                datasets: [{
+                    label: 'IMC',
+                    data: data.map(p => p.imc),
+                    backgroundColor: '#3498db'
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
