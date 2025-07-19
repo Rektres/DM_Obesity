@@ -7,29 +7,35 @@
   <style>
     * { box-sizing: border-box; }
     body, html {
-      height: 100%;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: #e0e0e0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: auto;
-      padding: 20px;
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    /* ===== Propiedades para el nuevo fondo de pantalla ===== */
+    background-image: url('https://raw.githubusercontent.com/Rektres/DM_Obesity/main/Images/fondodataset.jpg');    
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* ====================================================== */
+    color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 20px;
     }
     .container {
       width: 900px;
       max-width: 95vw;
       max-height: 95vh;
       overflow-y: auto;
-      background-color: #1e1e1e;
+      background-color: #094c667d;
       border-radius: 12px;
       padding: 30px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
       text-align: center;
     }
-    h2, h3 { color: #81d4fa; margin-bottom: 10px; }
+    h2, h3 { color: #000000; margin-bottom: 10px; }
     .graph-container {
       display: flex;
       justify-content: center;
@@ -102,6 +108,69 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #0277bd;
     }
+    /* ===== ESTILOS PARA EL MODAL Y BOTÓN ===== */
+.modal {
+  display: none; /* Oculto por defecto */
+  position: fixed; 
+  z-index: 100; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.7);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background-color: #2c3e50;
+  margin: 3% auto;
+  padding: 25px;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 1200px;
+  border-radius: 12px;
+  position: relative;
+  text-align: left;
+}
+
+.modal-content h2 {
+  text-align: center;
+  color: #81d4fa;
+}
+
+.modal-content p {
+  line-height: 1.6;
+}
+
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+.insights-btn {
+  background-color: #81d4fa;
+  color: #121212;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.insights-btn:hover {
+  background-color: #4fc3f7;
+}
   </style>
 </head>
 <body>
@@ -109,7 +178,26 @@
     
     <!-- Apriori Section -->
     <div class="section">
+<div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
     <h2>Reglas de Asociación (Apriori)</h2>
+    <button class="insights-btn" data-modal-title="Insights de Apriori" data-modal-text="insights-apriori">Ver Insights 💡</button>
+  </div>
+  <div id="insights-apriori" style="display: none;">
+      <h2>Insight 1: El algoritmo Apriori nos ha revelado varias reglas de asociación fuertes. Nos enfocaremos en las reglas con mayor
+    Confianza y Lift, ya que indican las relaciones más fuertes y menos probables de ocurrir por azar.</h2>
+   <p><strong>Dato Clave:</strong> La regla {Actividad Física Baja, Edad Alta, Consumo de Agua Alto} -> {Peso Alto} tiene una confianza del 84.3% y un Lift de 2.48. Esto significa que el 84% de las personas que cumplen con las tres condiciones del antecedente (sedentarismo, edad avanzada y alto consumo de agua) también presentan un peso alto. La asociación es 2.5 veces más fuerte de lo que se esperaría por casualidad.</p>
+<p><strong>BIG (Grande):</strong> Es un hallazgo de alto impacto, ya que apunta directamente a un segmento demográfico (adultos mayores) que es vulnerable a problemas de salud derivados del sobrepeso. Afecta métricas críticas de salud pública y bienestar.</p>
+<p><strong>ÚTIL (Accionable):</strong> La acción es muy clara. Permite diseñar campañas de salud focalizadas en adultos mayores, enfatizando que, aunque tengan hábitos positivos como una buena hidratación, la actividad física es un factor no negociable para el control del peso en su etapa de vida.</p>
+<p><strong>SORPRENDENTE:</strong> El elemento sorprendente es la presencia del "alto consumo de agua". Culturalmente, asociamos beber mucha agua con un estilo de vida saludable y control de peso. Este insight desafía esa creencia simplista, demostrando que para este grupo, la hidratación no compensa la falta de movimiento. Es la pieza que transforma un dato obvio ("los sedentarios pesan más") en una revelación matizada y profunda.</p>
+    
+
+<h2>Insight 2: La inactividad física tiene efectos opuestos en el peso de jóvenes y mayores, revelando a la edad como el factor decisivo.</h2>
+<p><strong>Dato Clave:</strong> Comparamos dos reglas fuertes: {Actividad Física Baja, Edad Baja} -> {Peso Bajo} (Confianza: 69.8%) y {Actividad Física Baja, Peso Alto} -> {Edad Alta} (Confianza: 78.9%).</p>
+<p><strong>BIG (Grande):</strong> Este insight es crucial para la segmentación en estrategias de salud. Demuestra que un enfoque "universal" para combatir el sedentarismo no es efectivo, ya que sus consecuencias inmediatas sobre el peso son drásticamente diferentes según la edad.</p>
+<p><strong>ÚTIL (Accionable):</strong> Permite crear mensajes y programas preventivos completamente distintos. Para los jóvenes, el mensaje no puede ser "si no te mueves, engordarás" (porque los datos sugieren lo contrario a corto plazo), sino "aunque hoy no veas el efecto en tu peso, estás construyendo un hábito que será perjudicial en el futuro". Para los mayores, el mensaje es de urgencia, ya que el sedentarismo está directamente correlacionado con el sobrepeso en su grupo.</p>
+<p><strong>SORPRENDENTE:</strong> Es contraintuitivo que un mismo comportamiento (baja actividad física) se asocie fuertemente con dos resultados opuestos (bajo peso y alto peso). Esto revela que la edad no es solo una variable más, sino un factor modulador crítico que cambia las reglas del juego en la relación entre estilo de vida y composición corporal.</p>
+
+</div>
     <div class="table-area">
         <h3>Top 15 Reglas de Asociación por 'Lift'</h3>
         <table>
@@ -234,7 +322,23 @@
 </div>
     <!-- Regresión Lineal Section -->
     <div class="section">
-      <h2>Modelo de Regresión Lineal</h2>
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+    <h2>Modelo de Regresión Lineal</h2>
+    <button class="insights-btn" data-modal-title="Insights de Regresión Lineal" data-modal-text="insights-RegresiónLineal">Ver Insights 💡</button>
+</div>
+<div id="insights-RegresiónLineal" style="display: none;">
+    <h2>Insight: Los hábitos y características físicas actuales son un predictor mediocre de la edad; el modelo solo explica la mitad de la historia.</h2>
+<p><strong>Dato Clave:</strong> Un R² de 0.4839 indica que el modelo solo puede explicar el 48.4% de la variabilidad en la edad de las personas. El RMSE de 3.15 años significa que, en promedio, las predicciones del modelo tienen un error de más de 3 años, lo cual puede ser significativo.</p>
+<p><strong>BIG (Grande):</strong> Es un hallazgo de alto impacto. Si el objetivo es usar la edad para segmentar clientes y personalizar ofertas, un modelo que ignora el 52% de los factores que la explican llevará a estrategias mal dirigidas y a una pérdida de oportunidades.</p>
+<p><strong>ÚTIL (Accionable):</strong> Este insight nos da una dirección clara: un modelo lineal simple no es suficiente. Las acciones a seguir son:</p>
+<ul>
+    <li><strong>Buscar nuevas variables:</strong> Se necesita enriquecer el dataset con información que pueda tener una correlación más fuerte con la edad (ej. tipo de ocupación, nivel de estudios, etc.).</li>
+    <li><strong>Probar modelos más complejos:</strong> La relación entre los hábitos y la edad probablemente no es lineal. Es necesario explorar modelos no lineales (como Árboles de Decisión o Random Forest) que puedan capturar interacciones más complejas.</li>
+</ul>
+<p><strong>SORPRENDENTE:</strong> Podría ser sorprendente que un conjunto de variables tan intuitivamente ligadas al ciclo de vida (actividad física, peso, hábitos) explique menos de la mitad de la varianza de la edad. Esto desafía la suposición de que el estilo de vida es un proxy directo y simple de la edad cronológica.</p>
+
+</div>
       <div class="graph-container">
         <div class="left-space"></div>
             <div class="plot-area">
@@ -246,8 +350,18 @@
 
     <!-- Naive Bayes Section -->
     <div class="section">
-        <h2>Modelo Naive Bayes</h2>
         
+<div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+    <h2>Modelo Naive Bayes</h2>
+    <button class="insights-btn" data-modal-title="Insights de Naive Bayes" data-modal-text="insights-NaiveBayes">Ver Insights 💡</button>
+</div>
+<div id="insights-NaiveBayes" style="display: none;">
+<h2>Insight: El modelo es un excelente detector de la enfermedad, pero es poco confiable para confirmar que una persona está sana.</h2>
+<p><strong>Dato Clave:</strong> Existe una gran asimetría en el rendimiento. Para la clase "Enfermo", el modelo tiene una Precisión del 91% y una Sensibilidad (Recall) del 93%. En contraste, para la clase "No enfermo", la Precisión es de solo el 65% y la Sensibilidad del 57%. La matriz de confusión lo confirma: el modelo acierta con 322 de 346 enfermos, pero solo identifica correctamente a 44 de los 77 individuos sanos.</p>
+<p><strong>BIG (Grande):</strong> El impacto es enorme para la aplicación práctica del modelo. Si se usa como una herramienta de diagnóstico, fallaría en identificar correctamente al 43% de las personas sanas (100% - 57% de Recall), enviando a muchas a hacerse pruebas innecesarias (33 Falsos Positivos). Aún más crítico, dejaría a 24 personas enfermas sin un diagnóstico correcto (Falsos Negativos), lo que podría retrasar su tratamiento.</p>
+<p><strong>ÚTIL (Accionable):</strong> Este insight redefine el propósito del modelo. En lugar de ser una herramienta de diagnóstico definitiva, su verdadera utilidad reside en ser un sistema de pre-diagnóstico o screening. La acción es clara: si el modelo predice "Enfermo", se debe proceder con pruebas confirmatorias. Si predice "No enfermo", el resultado no es concluyente y no se puede descartar la enfermedad.</p>
+<p><strong>SORPRENDENTE:</strong> Lo sorprendente es cómo una métrica global como la exactitud del 87% puede ocultar una debilidad tan crítica. Sin analizar la matriz de confusión, se podría aprobar el despliegue de un modelo que en la práctica es deficiente en una de sus tareas clave: identificar correctamente a los sanos.</p>
+</div>
         <div class="graph-container">
             <div class="left-space"></div>
             <div class="plot-area">
@@ -296,7 +410,32 @@
     </div>
     <!-- Árbol de Decisión Section -->
     <div class="section">
-      <h2>Árbol de Decisión - Predicción de NObeyesdad</h2>
+<div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+    <h2>Árbol de Decisión - Predicción de NObeyesdad</h2>
+    <button class="insights-btn" data-modal-title="Insights de Árbol de Decisión" data-modal-text="insights-ArbolDecisión">Ver Insights 💡</button>
+</div>
+<div id="insights-ArbolDecisión" style="display: none;">
+<h2>Insight 1: El peso corporal es el factor dominante y jerárquico que define la obesidad, relegando los hábitos de vida a un rol secundario.</h2>
+<p><strong>Dato Clave:</strong> La estructura misma del árbol de decisión. El nodo raíz (la primera y más importante división) es Weight &lt;= 75.926. Las siguientes divisiones principales en ambas ramas también se basan en el peso (Weight &lt;= 60.059 y Weight &lt;= 99.536). Variables de comportamiento como la actividad física (FAF) o el monitoreo de calorías (SCC) solo aparecen en niveles inferiores del árbol.</p>
+<p><strong>BIG (Grande):</strong> Este hallazgo es fundamental para cualquier estrategia de salud pública o clínica. Implica que, si bien fomentar hábitos saludables es crucial, el peso actual es el indicador de riesgo más inmediato y potente. Las intervenciones deben ser escalonadas: primero segmentar por el nivel de riesgo actual (peso) y luego personalizar según los hábitos.</p>
+<p><strong>ÚTIL (Accionable):</strong> Permite diseñar un plan de acción de dos niveles:</p>
+<ul>
+    <li><strong>Nivel 1 (Filtro Principal):</strong> Utilizar el peso como un criterio de screening rápido y de bajo costo para identificar a la población en diferentes niveles de riesgo.</li>
+    <li><strong>Nivel 2 (Intervención Personalizada):</strong> Una vez segmentada la población por peso, utilizar las variables secundarias (como actividad física para el grupo de peso medio o la edad para el grupo de peso más alto) para diseñar recomendaciones específicas y personalizadas.</li>
+</ul>
+<p><strong>SORPRENDENTE:</strong> Es revelador que variables de comportamiento, que son el foco principal de muchas campañas de salud ("muévete más", "come mejor"), sean predictores secundarios. El modelo nos dice que la condición física actual (el peso) tiene más poder predictivo que los hábitos que la persona reporta. Esto desafía la narrativa común y sugiere que las estrategias deben enfocarse tanto en la gestión del estado actual como en la modificación de hábitos.</p>
+
+<h2>Insight 2: El modelo descubre dos perfiles de obesidad severa fuertemente asociados al género, sugiriendo que la Obesidad Tipo I y II son condiciones que afectan de forma desproporcionada a las mujeres.</h2>
+<p><strong>Dato Clave:</strong> La tabla de distribución de género muestra que el 100% de las personas clasificadas por el modelo como Obesidad Tipo II son mujeres, y el 88.7% de las clasificadas como Obesidad Tipo I también lo son. El modelo, a partir de los datos, ha aprendido que ser hombre y tener Obesidad Tipo II es prácticamente imposible.</p>
+<p><strong>BIG (Grande):</strong> Este es un insight de gran impacto clínico y de salud pública. Sugiere que los factores fisiológicos, metabólicos o de comportamiento que conducen a estos tipos específicos de obesidad están fuertemente ligados al género. Esto podría cambiar la forma en que se diagnostican, previenen y tratan estas condiciones.</p>
+<p><strong>ÚTIL (Accionable):</strong> La acción es directa y segmentada:</p>
+<ul>
+    <li><strong>Enfoque de Género:</strong> Las campañas de prevención y los programas de tratamiento para la Obesidad Tipo I y II deben estar diseñados y dirigidos principalmente a una audiencia femenina.</li>
+    <li><strong>Alerta Clínica:</strong> Para un médico, si una paciente mujer presenta un peso elevado, la probabilidad de que se trate de Obesidad Tipo I o II es mucho mayor, lo que podría guiar el diagnóstico y el tratamiento.</li>
+    <li><strong>Línea de Investigación:</strong> Este hallazgo justifica una investigación más profunda para entender las causas subyacentes (biológicas, sociales, etc.) de esta marcada diferencia.</li>
+</ul>
+<p><strong>SORPRENDENTE:</strong> Si bien puede haber una percepción general de que la obesidad afecta de manera diferente a hombres y mujeres, la contundencia del 100% para la Obesidad Tipo II es un hallazgo extremo y muy llamativo. El modelo no encontró una tendencia, sino una regla casi absoluta en los datos de entrenamiento, lo que lo convierte en un descubrimiento muy potente.</p>
+</div>
       <div class="graph-container">
         <div class="left-space"></div>
         <div class="plot-area">
@@ -330,7 +469,17 @@
 
     <!-- Clustering Section -->
     <div class="section">
-      <h2>Clustering de Tipos de Persona (K-Means)</h2>
+      
+<div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+    <h2>Clustering de Tipos de Persona (K-Means)</h2>
+    <button class="insights-btn" data-modal-title="Insights de Clustering" data-modal-text="insights-Clustering">Ver Insights 💡</button>
+</div>
+<div id="insights-Clustering" style="display: none;">
+<h2>Insight: El transporte público, lejos de ser un factor protector, está asociado con el perfil de obesidad más severo, probablemente al limitar la actividad física incidental en personas con alta predisposición genética.</h2>
+<p><strong>BIG (Grande):</strong> Este segmento representa un foco rojo para la salud pública. Su combinación de alto peso y sedentarismo, ligada a su movilidad urbana, implica altos costos de salud a futuro y una baja calidad de vida.</p>
+<p><strong>ÚTIL (Accionable):</strong> La acción es directa y localizada. Se pueden implementar campañas de salud directamente en el sistema de transporte público (autobuses, estaciones de metro) con mensajes como "Bájate una parada antes y camina".</p>
+<p><strong>SORPRENDENTE:</strong> Es contraintuitivo. A menudo se promueve el transporte público como una alternativa más activa que el coche. Sin embargo, los datos revelan que para este grupo, es el ecosistema donde se desarrolla el perfil de mayor riesgo de obesidad. Desafía la creencia de que no usar el coche es inherentemente más saludable.</p>
+</div>
       <div class="graph-container">
         <div class="left-space"></div>
         <div class="plot-area">
@@ -361,8 +510,51 @@
       </div>
     </div>
   </div>
+
+<div id="insightsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <h2 id="modalTitle">Insights del Modelo</h2>
+    <p id="modalText">Aquí va el texto de los insights...</p>
+  </div>
+</div>
 <script>
- 
+    // ===== CÓDIGO PARA LA FUNCIONALIDAD DEL MODAL =====
+document.addEventListener('DOMContentLoaded', () => {
+  // Obtener los elementos del DOM
+  const modal = document.getElementById('insightsModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalText = document.getElementById('modalText');
+  const closeButton = document.querySelector('.close-button');
+  const insightButtons = document.querySelectorAll('.insights-btn');
+
+  // Función para abrir el modal
+  insightButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const title = button.getAttribute('data-modal-title');
+      const textId = button.getAttribute('data-modal-text');
+      const textContent = document.getElementById(textId).innerHTML;
+      
+      modalTitle.innerText = title;
+      modalText.innerHTML = textContent;
+      modal.style.display = 'block';
+    });
+  });
+
+  // Función para cerrar el modal
+  const closeModal = () => {
+    modal.style.display = 'none';
+  }
+
+  closeButton.addEventListener('click', closeModal);
+
+  // Cerrar el modal si se hace clic fuera de la ventana
+  window.addEventListener('click', (event) => {
+    if (event.target == modal) {
+      closeModal();
+    }
+  });
+});
 </script>
 </body>
 </html>
